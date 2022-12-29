@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/_home"
+        android:title="Home"/>
+    <item
+        android:id="@+id/profile_screen"
+        android:title="Profile"/>
+    <item
+        android:id="@+id/add_ticket"
+        android:title="Set Tickets"/>
+    <item
+        android:id="@+id/personal_item"
+        android:title="View Personal Items"/>
+    <item
+        android:id="@+id/Prefeard_item"
+        android:title="View Prefeard items"/>
+    <item
+        android:id="@+id/_login"
+        android:title="Login"/>
+    <item
+        android:id="@+id/_about"
+        android:title="About"/>
+    <item
+        android:id="@+id/_logout"
+        android:title="Logout"/>
+</menu>

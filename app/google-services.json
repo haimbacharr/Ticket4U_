@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "366036443416",
+    "project_id": "ticket4u-bd3b6",
+    "storage_bucket": "ticket4u-bd3b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366036443416:android:d52b25a81525f6fed9be6d",
+        "android_client_info": {
+          "package_name": "com.example.ticket4u"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366036443416-g7g7l7uemgmn6fqsv327fq8s4ig58r9e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_8pjqhyj8yL3G5BA6dsx5G5Dj3T6Fqco"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366036443416-g7g7l7uemgmn6fqsv327fq8s4ig58r9e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -61,7 +61,7 @@ public class SubCategoryActivity extends AppCompatActivity {
         loadingDialog.show();
         stringArrayList=new ArrayList<String>();
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){

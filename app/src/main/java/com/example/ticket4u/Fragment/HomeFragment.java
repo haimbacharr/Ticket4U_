@@ -3,18 +3,23 @@ package com.example.ticket4u.Fragment;
 import static com.example.ticket4u.Utils.Constant.getUserId;
 import static com.example.ticket4u.Utils.Constant.getUserLoginStatus;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -23,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ticket4u.Model.Category;
 import com.example.ticket4u.Model.Item;
@@ -33,9 +39,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class HomeFragment extends Fragment {
@@ -56,6 +68,9 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         search=view.findViewById(R.id.search);
+
+
+        checkPermission();
         //loading dialog
         loadingDialog=new Dialog(getContext());
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -87,7 +102,10 @@ public class HomeFragment extends Fragment {
             private void filter(String text) {
                 ArrayList<Item> filterlist=new ArrayList<>();
                 for(Item item: itemArrayList1){
-                    if(item.getName().toLowerCase().contains(text.toLowerCase())||item.getCategory().toLowerCase().contains(text.toLowerCase())){
+                    if(item.getName().toLowerCase().contains(text.toLowerCase())||item.getCategory().toLowerCase().contains(text.toLowerCase())
+                            ||item.getCity().toLowerCase().contains(text.toLowerCase())||
+                    item.getPic().toLowerCase().contains(text.toLowerCase())||
+                    item.getQuantity().toLowerCase().contains(text.toLowerCase())){
                         filterlist.add(item);
                     }
                 }
@@ -112,15 +130,19 @@ public void getAllData(){
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
                 itemArrayList1.add(new Item(
-                       dataSnapshot1.child("Name").getValue(String.class)
-                       ,dataSnapshot1.child("ItemImage").getValue(String.class)
-                       ,dataSnapshot1.child("Description").getValue(String.class)
-                       ,dataSnapshot1.child("Quantity").getValue(String.class)
-                       ,dataSnapshot1.child("Price").getValue(String.class)
-                       ,dataSnapshot1.child("Category").getValue(String.class)
-                       ,dataSnapshot1.child("SubCategory").getValue(String.class)
-                       ,dataSnapshot1.child("UserId").getValue(String.class),
-                       dataSnapshot1.child("ItemId").getValue(String.class)
+                        dataSnapshot1.child("Name").getValue(String.class)
+                        ,dataSnapshot1.child("ItemImage").getValue(String.class)
+                        ,dataSnapshot1.child("Description").getValue(String.class)
+                        ,dataSnapshot1.child("Quantity").getValue(String.class)
+                        ,dataSnapshot1.child("OriginalPrice").getValue(String.class)
+                        ,dataSnapshot1.child("Category").getValue(String.class)
+                        ,dataSnapshot1.child("SubCategory").getValue(String.class)
+                        ,dataSnapshot1.child("UserId").getValue(String.class),
+                        dataSnapshot1.child("ItemId").getValue(String.class)
+                        , dataSnapshot1.child("AskingPrice").getValue(String.class)
+                        ,dataSnapshot1.child("Date").getValue(String.class)
+                        ,dataSnapshot1.child("City").getValue(String.class)
+                        ,dataSnapshot1.child("Number").getValue(String.class)
                ));
             }
             categoryAdapter=new CategoryAdapter();
@@ -144,17 +166,24 @@ public void getAllData(){
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
                     if(name.equals(dataSnapshot1.child("Category").getValue(String.class))){
-                        itemArrayList1.add(new Item(
-                                dataSnapshot1.child("Name").getValue(String.class)
-                                ,dataSnapshot1.child("ItemImage").getValue(String.class)
-                                ,dataSnapshot1.child("Description").getValue(String.class)
-                                ,dataSnapshot1.child("Quantity").getValue(String.class)
-                                ,dataSnapshot1.child("Price").getValue(String.class)
-                                ,dataSnapshot1.child("Category").getValue(String.class)
-                                ,dataSnapshot1.child("SubCategory").getValue(String.class)
-                                ,dataSnapshot1.child("UserId").getValue(String.class),
-                                dataSnapshot1.child("ItemId").getValue(String.class)
-                        ));
+                        if(dataSnapshot1.child("Sold").getValue(String.class).equals("not")){
+                            itemArrayList1.add(new Item(
+                                    dataSnapshot1.child("Name").getValue(String.class)
+                                    ,dataSnapshot1.child("ItemImage").getValue(String.class)
+                                    ,dataSnapshot1.child("Description").getValue(String.class)
+                                    ,dataSnapshot1.child("Quantity").getValue(String.class)
+                                    ,dataSnapshot1.child("OriginalPrice").getValue(String.class)
+                                    ,dataSnapshot1.child("Category").getValue(String.class)
+                                    ,dataSnapshot1.child("SubCategory").getValue(String.class)
+                                    ,dataSnapshot1.child("UserId").getValue(String.class),
+                                    dataSnapshot1.child("ItemId").getValue(String.class)
+                                    , dataSnapshot1.child("AskingPrice").getValue(String.class)
+                                    ,dataSnapshot1.child("Date").getValue(String.class)
+                                    ,dataSnapshot1.child("City").getValue(String.class)
+                                    ,dataSnapshot1.child("Number").getValue(String.class)
+                            ));
+                        }
+
 
                     }
 
@@ -194,7 +223,7 @@ public void getAllData(){
         categoryArrayList=new ArrayList<Category>();
         categoryArrayList.add(new Category("All",""));
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
@@ -345,16 +374,24 @@ public void getAllData(){
                         .fit()
                         .centerCrop()
                         .into(holder.cat_image);
-
-
             holder.name.setText(itemArrayList.get(position).getName());
-            holder.price.setText(itemArrayList.get(position).getPrice());
-            holder.quantity.setText(itemArrayList.get(position).getQuantity());
+            holder.price.setText("Price "+itemArrayList.get(position).getOriginalPrice()+" $");
+            holder.quantity.setText("Quantity "+itemArrayList.get(position).getQuantity());
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                               startActivity(new Intent(getContext(), DetailActivity.class)
-                                       .putExtra("index",position));
+                    if(favouriteItemList.contains(itemArrayList.get(position).getItemId())){
+                        startActivity(new Intent(getContext(), DetailActivity.class)
+                                .putExtra("index",position)
+                        .putExtra("status",true));
+                    }
+                    else {
+                        startActivity(new Intent(getContext(), DetailActivity.class)
+                                .putExtra("index",position)
+                                .putExtra("status",false));
+                    }
+
+
                 }
             });
 
@@ -388,10 +425,52 @@ public void getAllData(){
     }
 
 
+    public  void checkPermission(){
+        Dexter.withActivity(getActivity())
+                .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE
+                ,Manifest.permission.ACCESS_FINE_LOCATION)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
 
+                        }
 
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            showSettingsDialog();
+                        }
+                    }
 
-    public String createFavId() throws Exception{
-        return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).check();
+    }
+    private void showSettingsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(getString(R.string.dialog_permission_title));
+        builder.setMessage(getString(R.string.dialog_permission_message));
+        builder.setPositiveButton(getString(R.string.go_to_settings), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                openSettings();
+            }
+        });
+        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+//
+    }
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package",getContext().getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, 101);
     }
 }

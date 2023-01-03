@@ -1,6 +1,5 @@
 package com.example.ticket4u;
 
-import static com.example.ticket4u.Utils.Constant.ShowMessageDialogWithOkBtn;
 import static com.example.ticket4u.Utils.Constant.getUserLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
@@ -12,23 +11,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
+import com.example.ticket4u.Fragment.AboutFragment;
 import com.example.ticket4u.Fragment.HomeFragment;
-import com.example.ticket4u.Fragment.LoginFragment;
-import com.example.ticket4u.User.AboutActivity;
+import com.example.ticket4u.Fragment.PreferedItemFragment;
+import com.example.ticket4u.Fragment.SelectCategoryFragment;
+import com.example.ticket4u.Fragment.UpdateProfileFragment;
+import com.example.ticket4u.Fragment.UserItemFragment;
 import com.example.ticket4u.User.AccountActivity;
-import com.example.ticket4u.User.AddItemActivity;
-import com.example.ticket4u.User.PreferedItemActivity;
-import com.example.ticket4u.User.SelectCategoryActivity;
-import com.example.ticket4u.User.UpdateProfileActivity;
-import com.example.ticket4u.User.UserItemActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,22 +55,28 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.frag,new HomeFragment()).commit();
                         break;
                         case R.id._login:
-                            startActivity(new Intent(MainActivity.this, AccountActivity.class));
+                            startActivity(new Intent(MainActivity.this, AccountActivity.class)
+                                    .putExtra("screen","login"));
                             break;
+                            case R.id._logout_user:
+                            startActivity(new Intent(MainActivity.this, AccountActivity.class)
+                            .putExtra("screen","register"));
+                            break;
+
                             case R.id._about:
-                                startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                                getSupportFragmentManager().beginTransaction().replace(R.id.frag,new AboutFragment()).commit();
                         break;
                     case R.id.add_ticket:
-                        startActivity(new Intent(MainActivity.this, SelectCategoryActivity.class));
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frag,new SelectCategoryFragment()).commit();
                         break;
                     case R.id.profile_screen:
-                        startActivity(new Intent(MainActivity.this, UpdateProfileActivity.class));
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frag,new UpdateProfileFragment()).commit();
                         break;
                     case R.id.personal_item:
-                        startActivity(new Intent(MainActivity.this, UserItemActivity.class));
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frag,new UserItemFragment()).commit();
                         break;
                     case R.id.Prefeard_item:
-                        startActivity(new Intent(MainActivity.this, PreferedItemActivity.class));
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frag,new PreferedItemFragment()).commit();
                         break;
                 }
                 drawer.closeDrawer(GravityCompat.START);
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         else {
             item.setVisible(true);//
             item1.setVisible(false);
-
+            hideOptionForLoginUser();
 
 
         }
@@ -122,7 +122,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(getIntent());
                 return true;
             case R.id.login:
-                startActivity(new Intent(MainActivity.this, AccountActivity.class));
+                startActivity(new Intent(MainActivity.this, AccountActivity.class)
+                        .putExtra("screen","login"));
 
                 return true;
             default:
@@ -145,6 +146,16 @@ public class MainActivity extends AppCompatActivity {
         Prefeard_item.setVisible(false);
         MenuItem _logout = menu.findItem(R.id._logout);
         _logout.setVisible(false);
+    }
+    public void hideOptionForLoginUser(){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        //navigationView.setNavigationItemSelectedListener(this);
+
+        Menu menu =navigationView.getMenu();
+        MenuItem _login = menu.findItem(R.id._login);
+        _login.setVisible(false);
+        MenuItem _register = menu.findItem(R.id._logout_user);
+        _register.setVisible(false);
     }
 
 }

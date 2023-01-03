@@ -20,6 +20,9 @@
         android:id="@+id/_login"
         android:title="Login"/>
     <item
+        android:id="@+id/_logout_user"
+        android:title="Register"/>
+    <item
         android:id="@+id/_about"
         android:title="About"/>
     <item

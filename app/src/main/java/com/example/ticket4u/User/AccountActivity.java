@@ -14,7 +14,14 @@ public class AccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
-        showLoginScreen();
+        if(getIntent().getStringExtra("screen").equals("login")){
+
+            showLoginScreen();
+        }
+        else {
+            showSignUpScreen();
+        }
+
     }
     // function to load login fragment in activity
     public void showLoginScreen(){

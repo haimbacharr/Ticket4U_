@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ticket4u">
+    package="com.example.ticket4u"
+    android:versionCode="1"
+    android:versionName="1.0">
 
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -14,40 +23,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mangement">
         <activity
+            android:name=".User.ItemDetailActivity"
+            android:exported="true" />
+        <activity
+            android:name=".User.EditItemActivity"
+            android:exported="true" />
+        <activity
             android:name=".Admin.ViewReportActivity"
             android:exported="true"
-            android:parentActivityName=".Admin.ReportActivity"/>
+            android:parentActivityName=".Admin.ReportActivity" />
         <activity
             android:name=".Admin.ReportActivity"
             android:exported="true"
-            android:parentActivityName=".Admin.AdminActivity"/>
+            android:label="Report List"
+            android:parentActivityName=".Admin.AdminActivity" />
         <activity
             android:name=".User.AddReportActivity"
             android:exported="true"
-            android:parentActivityName=".User.DetailActivity"/>
+            android:parentActivityName=".User.DetailActivity" />
         <activity
             android:name=".Admin.AdminActivity"
             android:exported="true" />
-        <activity
-            android:name=".User.AboutActivity"
-            android:exported="true"
-            android:parentActivityName=".MainActivity"/>
-        <activity
-            android:name=".User.UserItemActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".User.SelectCategoryActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
         <activity
             android:name=".User.DetailActivity"
             android:exported="false"
@@ -75,7 +71,7 @@
             android:name=".Map.MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps"
-            android:parentActivityName=".User.DetailActivity"/>
+            android:parentActivityName=".User.DetailActivity" />
         <activity
             android:name=".Admin.AddCategoryActivity"
             android:exported="false">
@@ -109,7 +105,7 @@
         <activity
             android:name=".Admin.AdminMainActivity"
             android:exported="false"
-            android:parentActivityName=".Admin.AdminActivity"/>
+            android:parentActivityName=".Admin.AdminActivity" />
         <activity
             android:name=".Screens.SplashActivity"
             android:exported="true">
@@ -122,14 +118,6 @@
         <activity
             android:name=".User.ForgotPasswordActivity"
             android:exported="false" />
-        <activity
-            android:name=".User.PreferedItemActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity"/>
-        <activity
-            android:name=".User.UpdateProfileActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".User.AccountActivity"
             android:exported="false" />

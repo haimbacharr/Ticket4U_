@@ -64,52 +64,93 @@
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_register_address"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="Address"
+                android:textSize="20sp"
+                android:textColor="@color/peach"
+                android:text="Select Interested Category"
+                />
+       <Spinner
+    android:layout_width="match_parent"
+    android:layout_margin="10dp"
+    android:id="@+id/spinner"
+    android:layout_height="50dp"
+      />
+             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_register_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="Country"
                 app:startIconDrawable="@drawable/ic_baseline_place_24"
                 tools:ignore="HardcodedText">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_register_address"
+                    android:id="@+id/et_register_country"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_latitude"
+                android:id="@+id/input_register_state"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="Latitude"
+                android:hint="State"
                 app:startIconDrawable="@drawable/ic_baseline_place_24"
                 tools:ignore="HardcodedText">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_latitude"
+                    android:id="@+id/et_register_state"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_longitude"
+                android:id="@+id/input_register_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="Longitude"
+                android:hint="City"
                 app:startIconDrawable="@drawable/ic_baseline_place_24"
                 tools:ignore="HardcodedText">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_longitude"
+                    android:id="@+id/et_register_city"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:id="@+id/input_latitude"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:hint="Latitude"-->
+<!--                app:startIconDrawable="@drawable/ic_baseline_place_24"-->
+<!--                tools:ignore="HardcodedText">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:id="@+id/et_latitude"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content" />-->
+
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:id="@+id/input_longitude"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:hint="Longitude"-->
+<!--                app:startIconDrawable="@drawable/ic_baseline_place_24"-->
+<!--                tools:ignore="HardcodedText">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:id="@+id/et_longitude"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content" />-->
+
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_register_usernumber"
                 android:layout_width="match_parent"

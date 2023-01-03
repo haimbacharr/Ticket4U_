@@ -46,6 +46,8 @@ public class ReportActivity extends AppCompatActivity {
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         listrecylerView=findViewById(R.id.listrecylerView);
         listrecylerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        categoryAdapter=new CategoryAdapter();
+        listrecylerView.setAdapter(categoryAdapter);
         getAllData();
     }
 
@@ -53,24 +55,40 @@ public class ReportActivity extends AppCompatActivity {
         loadingDialog.show();
         itemArrayList.clear();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Items");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
-                    itemArrayList.add(new Item(
-                            dataSnapshot1.child("Name").getValue(String.class)
-                            ,dataSnapshot1.child("ItemImage").getValue(String.class)
-                            ,dataSnapshot1.child("Description").getValue(String.class)
-                            ,dataSnapshot1.child("Quantity").getValue(String.class)
-                            ,dataSnapshot1.child("Price").getValue(String.class)
-                            ,dataSnapshot1.child("Category").getValue(String.class)
-                            ,dataSnapshot1.child("SubCategory").getValue(String.class)
-                            ,dataSnapshot1.child("UserId").getValue(String.class),
-                            dataSnapshot1.child("ItemId").getValue(String.class)
-                    ));
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Items").child(dataSnapshot1.child("ItemId").getValue(String.class)).child("Report");
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String report=  dataSnapshot.child("itemReport").getValue(String.class);
+                            if(report!=null){
+                                itemArrayList.add(new Item(
+                                        dataSnapshot1.child("Name").getValue(String.class)
+                                        ,dataSnapshot1.child("ItemImage").getValue(String.class)
+                                        ,dataSnapshot1.child("Description").getValue(String.class)
+                                        ,dataSnapshot1.child("Quantity").getValue(String.class)
+                                        ,dataSnapshot1.child("OriginalPrice").getValue(String.class)
+                                        ,dataSnapshot1.child("Category").getValue(String.class)
+                                        ,dataSnapshot1.child("SubCategory").getValue(String.class)
+                                        ,dataSnapshot1.child("UserId").getValue(String.class),
+                                        dataSnapshot1.child("ItemId").getValue(String.class)
+                                        , dataSnapshot1.child("AskingPrice").getValue(String.class)
+                                        ,dataSnapshot1.child("Date").getValue(String.class)
+                                ));
+                                categoryAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
-                categoryAdapter=new CategoryAdapter();
-                listrecylerView.setAdapter(categoryAdapter);
+
                 categoryAdapter.notifyDataSetChanged();
                 loadingDialog.dismiss();
             }
@@ -112,36 +130,13 @@ public class ReportActivity extends AppCompatActivity {
 
 
             holder.name.setText(itemArrayList.get(position).getName());
-            holder.price.setText(itemArrayList.get(position).getPrice());
-            holder.quantity.setText(itemArrayList.get(position).getQuantity());
+            holder.price.setText("Price "+itemArrayList.get(position).getOriginalPrice()+" $");
+            holder.quantity.setText("Quantity "+itemArrayList.get(position).getQuantity());
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
-                    builder.setTitle("Alert");
-                    builder.setMessage("Do you want to see the item report?");
-
-                    // add the buttons
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                                   startActivity(new Intent(ReportActivity.this,ViewReportActivity.class)
-                                   .putExtra("itemId",itemArrayList.get(position).getItemId()));
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            dialog.dismiss();
-                        }
-                    });
-
-                    // create and show the alert dialog
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    startActivity(new Intent(ReportActivity.this,ViewReportActivity.class)
+                            .putExtra("itemId",itemArrayList.get(position).getItemId()));
                 }
             });
 

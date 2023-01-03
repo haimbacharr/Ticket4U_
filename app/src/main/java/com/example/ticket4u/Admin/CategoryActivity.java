@@ -1,11 +1,6 @@
 package com.example.ticket4u.Admin;
 
 
-import static com.example.ticket4u.Utils.Constant.setUserEmail;
-import static com.example.ticket4u.Utils.Constant.setUserId;
-import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
-import static com.example.ticket4u.Utils.Constant.setUsername;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -21,15 +16,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ticket4u.Model.Category;
 import com.example.ticket4u.R;
-import com.example.ticket4u.User.UpdateProfileActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -72,7 +63,7 @@ public class CategoryActivity extends AppCompatActivity {
         loadingDialog.show();
            stringArrayList=new ArrayList<Category>();
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){

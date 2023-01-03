@@ -1,8 +1,10 @@
 package com.example.ticket4u.User;
 
-import static com.example.ticket4u.User.SelectCategoryActivity.CATEGORY;
-import static com.example.ticket4u.User.SelectCategoryActivity.SUBCATEGORY;
+import static com.example.ticket4u.Fragment.SelectCategoryFragment.CATEGORY;
+import static com.example.ticket4u.Fragment.SelectCategoryFragment.SUBCATEGORY;
+import static com.example.ticket4u.Utils.Constant.getUserCity;
 import static com.example.ticket4u.Utils.Constant.getUserId;
+import static com.example.ticket4u.Utils.Constant.getUserNumber;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -23,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,18 +49,22 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class AddItemActivity extends AppCompatActivity {
-    private EditText et_item_name,et_item_price, et_item_quantity, et_description;
+    private EditText et_item_name,et_item_asking_price,et_item_original_price, et_item_quantity, et_description,et_item_date;
 
     DatabaseReference myRef;
     private Dialog loadingDialog;
     ImageView imageView;
     StorageReference mRef;
     private Uri imgUri =null;
-
+    DatePickerDialog datePicker;
+    final Calendar myCalendar= Calendar.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,15 +73,38 @@ public class AddItemActivity extends AppCompatActivity {
 
         et_item_name=findViewById(R.id.et_item_name);
         imageView=findViewById(R.id.itemPic);
-        et_item_price=findViewById(R.id.et_item_price);
+        et_item_original_price=findViewById(R.id.et_item_original_price);
+        et_item_asking_price=findViewById(R.id.et_item_asking_price);
         et_item_quantity=findViewById(R.id.et_item_quantity);
         et_description=findViewById(R.id.et_description);
+        et_item_date=findViewById(R.id.et_item_date);
         /////loading dialog
         loadingDialog=new Dialog(this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
         loadingDialog.setCancelable(false);
         loadingDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        DatePickerDialog.OnDateSetListener date =new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH,month);
+                myCalendar.set(Calendar.DAY_OF_MONTH,day);
+                String myFormat="MM/dd/yyyy";
+                SimpleDateFormat dateFormat=new SimpleDateFormat(myFormat, Locale.US);
+                et_item_date.setText(dateFormat.format(myCalendar.getTime()));
+            }
+        };
+
+        et_item_date.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
+            @Override
+            public void onClick(View view) {
+                datePicker =  new DatePickerDialog(AddItemActivity.this,date,myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH));
+                datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                datePicker.show();
+            }
+        });
     }
 
     public void saveRecord(View view) {
@@ -96,10 +127,15 @@ public class AddItemActivity extends AppCompatActivity {
                             myRef.child("Category").setValue(CATEGORY);
                             myRef.child("SubCategory").setValue(SUBCATEGORY);
                             myRef.child("UserId").setValue(getUserId(AddItemActivity.this));
-                            myRef.child("Price").setValue(et_item_price.getText().toString());
+                            myRef.child("AskingPrice").setValue(et_item_asking_price.getText().toString());
+                            myRef.child("OriginalPrice").setValue(et_item_original_price.getText().toString());
+                            myRef.child("Date").setValue(et_item_date.getText().toString());
                             myRef.child("Quantity").setValue(et_item_quantity.getText().toString());
                             myRef.child("Description").setValue(et_description.getText().toString());
                             myRef.child("ItemImage").setValue(downloadUrl.toString());
+                            myRef.child("Sold").setValue("not");
+                            myRef.child("Number").setValue(getUserNumber(AddItemActivity.this));
+                            myRef.child("City").setValue(getUserCity(AddItemActivity.this));
                             loadingDialog.dismiss();
                             Toast.makeText(AddItemActivity.this,"item Add successful",Toast.LENGTH_LONG).show();
                             finish();
@@ -125,9 +161,6 @@ public class AddItemActivity extends AppCompatActivity {
             loadingDialog.dismiss();
             e.printStackTrace();
         }
-
-
-
 
 
 

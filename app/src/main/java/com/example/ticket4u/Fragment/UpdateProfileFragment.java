@@ -69,18 +69,16 @@ public class UpdateProfileFragment extends Fragment {
     ArrayAdapter arrayAdapter;
     String category;
     int selectIndex=0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_update_profile, container, false);
         mRef= FirebaseStorage.getInstance().getReference("profile_images");
-
         et_user_name=view.findViewById(R.id.et_user_name);
         imageView=view.findViewById(R.id.updateUserPic);
         et_user_number=view.findViewById(R.id.et_user_number);
-
-
         et_register_country=view.findViewById(R.id.et_register_country);
         et_register_state=view.findViewById(R.id.et_register_state);
         et_register_city=view.findViewById(R.id.et_register_city);
@@ -90,35 +88,26 @@ public class UpdateProfileFragment extends Fragment {
         loadingDialog.setCancelable(false);
         loadingDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-
-
-
         spinner =view.findViewById(R.id.spinner);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { //listener for select category
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 category =  stringArrayList.get(position);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 
-
-
-
-
-
-        loadProfile();
+        loadProfile(); //read from firebase
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addImage();
-            }
+            } //like register page, for change picture
         });
+
         btn_update=view.findViewById(R.id.btn_update);
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,21 +117,21 @@ public class UpdateProfileFragment extends Fragment {
         });
         return view;
     }
+
     public void getData(String userCategory){
         stringArrayList.clear();
         stringArrayList.add("General");
-        DatabaseReference databaseReference  =  FirebaseDatabase.getInstance().getReference().child("Category");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Category");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){ //add category from db to arraylist
                     if(!stringArrayList.contains(dataSnapshot1.child("Name").getValue(String.class))){
                         stringArrayList.add(dataSnapshot1.child("Name").getValue(String.class));
-                        if(userCategory.equals(dataSnapshot1.child("Name").getValue(String.class))){
-                            selectIndex=stringArrayList.size()-1;
+                        if(userCategory.equals(dataSnapshot1.child("Name").getValue(String.class))){ //if we found the category
+                            selectIndex=stringArrayList.size()-1; //update the index of our chosen category
                         }
                     }
-
                 }
                 loadingDialog.dismiss();
                 arrayAdapter = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,stringArrayList);
@@ -158,10 +147,10 @@ public class UpdateProfileFragment extends Fragment {
             }
         });
     }
-    public void loadProfile(){
 
+    public void loadProfile(){
         loadingDialog.show();
-        DatabaseReference myRef=  FirebaseDatabase.getInstance().getReference().child("User").child(getUserId(getContext()));
+        DatabaseReference myRef=FirebaseDatabase.getInstance().getReference().child("User").child(getUserId(getContext()));
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -169,7 +158,6 @@ public class UpdateProfileFragment extends Fragment {
                 et_register_country.setText(dataSnapshot.child("Country").getValue(String.class));
                 et_register_city.setText(dataSnapshot.child("City").getValue(String.class));
                 et_register_state.setText(dataSnapshot.child("State").getValue(String.class));
-               // dataSnapshot.child("Category").getValue(String.class);
                 et_user_number.setText(dataSnapshot.child("PhoneNumber").getValue(String.class));
 
                 Picasso.with(getContext())
@@ -178,12 +166,11 @@ public class UpdateProfileFragment extends Fragment {
                         .fit()
                         .centerCrop()
                         .into(imageView);
-                getData(dataSnapshot.child("Category").getValue(String.class));
+                getData(dataSnapshot.child("Category").getValue(String.class)); //load category inside spinner
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
@@ -194,10 +181,11 @@ public class UpdateProfileFragment extends Fragment {
         MimeTypeMap mime=MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(uri));
     }
+
     public void updateProfile() {
         loadingDialog.show();
         myRef=  FirebaseDatabase.getInstance().getReference().child("User").child(getUserId(getContext()));
-        if(imgUri!=null){
+        if(imgUri!=null){ //if there is update also in picture
             StorageReference storageReference = mRef.child(System.currentTimeMillis() + "." + getFileEx(imgUri));
             storageReference.putFile(imgUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -215,8 +203,6 @@ public class UpdateProfileFragment extends Fragment {
                             myRef.child("UserImage").setValue(downloadUrl.toString());
                             loadingDialog.dismiss();
                             Toast.makeText(getContext(),"profile updated", Toast.LENGTH_LONG).show();
-
-
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -229,12 +215,11 @@ public class UpdateProfileFragment extends Fragment {
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-
                         }
                     });
 
         }
-        else {
+        else { //update just in regular fields without picture
             myRef.child("Name").setValue(et_user_name.getText().toString());
             myRef.child("Country").setValue(et_register_country.getText().toString());
             myRef.child("City").setValue(et_register_city.getText().toString());
@@ -243,11 +228,9 @@ public class UpdateProfileFragment extends Fragment {
             myRef.child("PhoneNumber").setValue(et_user_number.getText().toString());
             setUsername(getContext(),et_user_name.getText().toString());
             Toast.makeText(getContext(),"profile updated", Toast.LENGTH_LONG).show();
-
             loadingDialog.dismiss();
         }
     }
-
 
     public void selectImageFromGallery(){
         Intent intent=new Intent(Intent.ACTION_PICK,android.provider. MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -263,7 +246,6 @@ public class UpdateProfileFragment extends Fragment {
                         if (report.areAllPermissionsGranted()) {
                             selectImageFromGallery();
                         }
-
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             showSettingsDialog();
                         }
@@ -293,7 +275,7 @@ public class UpdateProfileFragment extends Fragment {
             }
         });
         builder.show();
-//
+
     }
     private void openSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -301,6 +283,7 @@ public class UpdateProfileFragment extends Fragment {
         intent.setData(uri);
         startActivityForResult(intent, 101);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -308,6 +291,5 @@ public class UpdateProfileFragment extends Fragment {
             imgUri  = data.getData();
             imageView.setImageURI(imgUri);
         }
-
     }
 }

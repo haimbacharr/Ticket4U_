@@ -90,9 +90,7 @@ public class RegisterFragment extends Fragment  {
     ArrayAdapter arrayAdapter;
     String category;
     FusedLocationProviderClient mFusedLocationClient;
-
     private static final int REQUEST_LOCATION = 1;
-
     protected LocationManager locationManager;
     String latitude="",longitude=""; //values for location
 
@@ -106,7 +104,7 @@ public class RegisterFragment extends Fragment  {
                                 new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
         // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) { // if gps off
             OnGPS();
         }
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
@@ -115,7 +113,6 @@ public class RegisterFragment extends Fragment  {
         getLastLocation();
 
         mRef= FirebaseStorage.getInstance().getReference("profile_images");
-
         imageView=view.findViewById(R.id.userPic);
         et_user_number=view.findViewById(R.id.et_user_number);
         et_register_country=view.findViewById(R.id.et_register_country);
@@ -127,7 +124,6 @@ public class RegisterFragment extends Fragment  {
         loadingDialog.setCancelable(false);
         loadingDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-
         firebaseAuth = FirebaseAuth.getInstance();
         etRegisterEmail = view.findViewById(R.id.et_register_email);
         etRegisterPassword = view.findViewById(R.id.et_register_password);
@@ -144,7 +140,6 @@ public class RegisterFragment extends Fragment  {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 
@@ -183,7 +178,7 @@ public class RegisterFragment extends Fragment  {
         return view;
     }
 
-    private void getLastLocation() {
+    private void getLastLocation() { //get the location and update the latitude and longitude of user.
         mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
@@ -215,7 +210,6 @@ public class RegisterFragment extends Fragment  {
     }
 
     private LocationCallback mLocationCallback = new LocationCallback() {
-
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location mLastLocation = locationResult.getLastLocation();
@@ -225,14 +219,14 @@ public class RegisterFragment extends Fragment  {
         }
     };
 
-    private void OnGPS() {
+    private void OnGPS() { //dialog for turn on gps.
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes", new  DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int which) { //if yes open location settings
                 startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() { //finish dialog.
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -265,7 +259,6 @@ public class RegisterFragment extends Fragment  {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
@@ -273,7 +266,6 @@ public class RegisterFragment extends Fragment  {
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     private boolean validate(String email, String name, String password, String confirm_password, String user_number) {
         if (email.isEmpty()) etRegisterEmail.setError("Enter email!");
-//        else if (imgUri==null) Toast.makeText(getContext(),"select your image",Toast.LENGTH_LONG).show();
         else if (user_number.isEmpty()) et_user_number.setError("Enter phone number!");
         else if (name.isEmpty()) et_user_name.setError("Enter name!");
         else if (!email.contains("@")||!email.contains(".")) etRegisterEmail.setError("Enter valid email!");
@@ -346,7 +338,6 @@ public class RegisterFragment extends Fragment  {
                         }
                     });
         }
-
         loadingDialog.dismiss();
         Toast.makeText(getContext(),"Registration successful",Toast.LENGTH_LONG).show();
         ((AccountActivity)getActivity()).showLoginScreen();
@@ -366,7 +357,6 @@ public class RegisterFragment extends Fragment  {
                         if (report.areAllPermissionsGranted()) {
                             selectImageFromGallery();
                         }
-
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             showSettingsDialog();
                         }

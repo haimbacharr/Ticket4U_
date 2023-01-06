@@ -121,7 +121,7 @@ public class LoginFragment extends Fragment {
                     // open the admin dashboard screen
                     loadingDialog.dismiss();
                     setAdminLoginStatus(getContext(),true);
-                    startActivity(new Intent(getContext(), AdminActivity.class));
+                    startActivity(new Intent(getContext(), AdminActivity.class)); // open admin
                     getActivity().finish();
                 }
                 else { //check if user
@@ -159,7 +159,7 @@ public class LoginFragment extends Fragment {
                         setUserLoginStatus(getContext(), true); //turn on the login status
                         setUserEmail(getContext(),etLoginEmail.getText().toString().trim());
                         loadingDialog.dismiss();
-                        openHomeActivity(); //go to home screen
+                        openHomeActivity(); //go to home screen (user)
                     }
                 }
             }

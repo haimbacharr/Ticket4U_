@@ -41,36 +41,47 @@ public class CategoryActivity extends AppCompatActivity {
     ArrayAdapter arrayAdapter;
     ArrayList<Category> stringArrayList =new ArrayList<Category>();
 
-    DatabaseReference myRef;
+    DatabaseReference myRef; //used as instance to get data from the firebase.
     private Dialog loadingDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
-        /////loading dialog
+
+        /* loading dialog */
         loadingDialog=new Dialog(this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
         loadingDialog.setCancelable(false);
         loadingDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-         myRef=  FirebaseDatabase.getInstance().getReference().child("Category");
+
+        myRef=  FirebaseDatabase.getInstance().getReference().child("Category"); /* reference to a specific location in the
+        Firebase Realtime Database, In this case, it points to the "Category" child node. */
+
         recyclerView=findViewById(R.id.recylerView);
+        /* The LinearLayoutManager is responsible for positioning the item views in a linear list. */
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 
+    /* part of the life cycle of an activity */
     @Override
     protected void onStart() {
         getData();
         super.onStart();
     }
 
+    /* The getData() method is called to fetch data from the database. This data is then used to populate the RecyclerView. */
     public void getData(){
-        loadingDialog.show();
-           stringArrayList=new ArrayList<Category>();
+        loadingDialog.show();// The loadingDialog is displayed while the data is being fetched.
+        stringArrayList=new ArrayList<Category>();
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                /* loop that add children to the categories */
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
                     if(!stringArrayList.contains(dataSnapshot1.child("Name").getValue(String.class))){
                         stringArrayList.add(new Category(dataSnapshot1.child("Name").getValue(String.class)
@@ -89,14 +100,19 @@ public class CategoryActivity extends AppCompatActivity {
         });
     }
 
+    /* when press on '+' icon will open new activity */
     public void addCategory(View view) {
         startActivity(new Intent(this,AddCategoryActivity.class)
                 .putExtra("name","empty"));
     }
 
     public class ArrayAdapter extends RecyclerView.Adapter<ArrayAdapter.ImageViewHoler> {
-        public ArrayAdapter(){
-        }
+
+        /* Constructor */
+        public ArrayAdapter(){}
+
+        /* onCreateViewHolder(): called when a new ViewHolder is needed.
+        This method creates a new View for the list item and wraps it in a ArrayAdapter.ImageViewHolder object. */
         @NonNull
         @Override
         public ArrayAdapter.ImageViewHoler onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -104,49 +120,58 @@ public class CategoryActivity extends AppCompatActivity {
             return  new ImageViewHoler(v);
         }
 
+
+        /* onBindViewHolder(): called to display the data at the specified position.
+        This method sets the data for the item at the given position.
+        It also sets an OnClickListener for the item's CardView,
+        which displays an AlertDialog asking the user 3 options: Delete item, view sub category or cancel. */
         @Override
         public void onBindViewHolder(@NonNull final ArrayAdapter.ImageViewHoler holder, @SuppressLint("RecyclerView") int position) {
             Picasso.with(CategoryActivity.this)
-                    .load(stringArrayList.get(position).getImage())
-                    .placeholder(R.drawable.progress_animation)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.cat_image);
+                    .load(stringArrayList.get(position).getImage()) //used to load the image from the URL.
+                    .placeholder(R.drawable.progress_animation) //used to specify a placeholder image to be displayed while the image is loading.
+                    .fit()  //used to resize the image to fit the dimensions of the ImageView
+                    .centerCrop() //used to crop the image to the center of the ImageView
+                    .into(holder.cat_image); //used to set the image in the ImageView
 
             holder.name.setText(stringArrayList.get(position).getName());
+
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View view) {
-                     final CharSequence[] options = {"Delete","View Sub Category", "Cancel"};
+                     final CharSequence[] options = {"Delete","View Sub Category", "Cancel"}; // three options will display when click on the category.
                      AlertDialog.Builder builder = new AlertDialog.Builder(CategoryActivity.this);
-                     builder.setTitle("Select option");
+                     builder.setTitle("Select option"); // Title of the alert dialog.
                      builder.setItems(options, new DialogInterface.OnClickListener() {
                          @Override
                          public void onClick(DialogInterface dialog, int item) {
                              if (options[item].equals("Delete")) {
                                  DatabaseReference databaseReference =   FirebaseDatabase.getInstance().getReference("Category").child(stringArrayList.get(position).getName());
-                                 databaseReference.removeValue();
-                                 dialog.dismiss();
-                                 getData();
+                                 databaseReference.removeValue(); // delete the "category" node and its children(sub directories).
+                                 dialog.dismiss(); //close the dialog and return to the Category activity.
+                                 getData(); // update the list of categories.
                              } else if (options[item].equals("Cancel")) {
                                   dialog.dismiss();
                              }
-                             else if (options[item].equals("View Sub Category")) {
+                             else if (options[item].equals("View Sub Category")) { // open new activity with the selected category.
                                  startActivity(new Intent(CategoryActivity.this,SubCategoryActivity.class)
                                          .putExtra("name",stringArrayList.get(position).getName()));
                              }
                          }
                      });
-                     builder.show();
+                     builder.show(); // display the dialog to the user.
                  }
              });
         }
 
+        /* getItemCount(): returns the number of items in the data set. */
         @Override
         public int getItemCount() {
             return stringArrayList.size();
         }
 
+        /* inner class called ImageViewHolder that extends RecyclerView.ViewHolder and represents a view holder for the list item.
+        It holds the item's views, such as the name, price, and image views. */
         public class ImageViewHoler extends RecyclerView.ViewHolder {
             TextView name;
             ImageView cat_image;
@@ -159,12 +184,16 @@ public class CategoryActivity extends AppCompatActivity {
             }
         }
     }
+
+    /* create a menu in the top right corner of the activity */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
+    /* The functionality of the menu */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

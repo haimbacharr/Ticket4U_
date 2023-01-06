@@ -80,7 +80,8 @@
         <activity
             android:name=".Admin.AddCategoryActivity"
             android:label="Admin -> View categories -> Add category"
-            android:exported="false">
+            android:exported="false"
+            android:parentActivityName=".Admin.CategoryActivity" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

@@ -48,12 +48,9 @@ public class ViewReportActivity extends AppCompatActivity {
 
                 loadingDialog.dismiss();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
-
     }
 }

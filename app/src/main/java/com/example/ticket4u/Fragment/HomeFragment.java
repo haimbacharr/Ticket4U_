@@ -60,7 +60,7 @@ public class HomeFragment extends Fragment {
     private Dialog loadingDialog;
     EditText search;
     ArrayList<String> favouriteItemList=new ArrayList<String>();
-   public static ArrayList<Item> itemArrayList =new ArrayList<Item>();
+    public static ArrayList<Item> itemArrayList =new ArrayList<Item>();
     public  ArrayList<Item> itemArrayList1 =new ArrayList<Item>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,7 +68,6 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         search=view.findViewById(R.id.search);
-
 
         checkPermission();
         //loading dialog
@@ -122,40 +121,43 @@ public class HomeFragment extends Fragment {
         getAllData();
         super.onStart();
     }
-public void getAllData(){
-    itemArrayList1.clear();
+
+    public void getAllData(){
+        itemArrayList1.clear();
         DatabaseReference databaseReference =FirebaseDatabase.getInstance().getReference("Items");
-    databaseReference.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
-                itemArrayList1.add(new Item(
-                        dataSnapshot1.child("Name").getValue(String.class)
-                        ,dataSnapshot1.child("ItemImage").getValue(String.class)
-                        ,dataSnapshot1.child("Description").getValue(String.class)
-                        ,dataSnapshot1.child("Quantity").getValue(String.class)
-                        ,dataSnapshot1.child("OriginalPrice").getValue(String.class)
-                        ,dataSnapshot1.child("Category").getValue(String.class)
-                        ,dataSnapshot1.child("SubCategory").getValue(String.class)
-                        ,dataSnapshot1.child("UserId").getValue(String.class),
-                        dataSnapshot1.child("ItemId").getValue(String.class)
-                        , dataSnapshot1.child("AskingPrice").getValue(String.class)
-                        ,dataSnapshot1.child("Date").getValue(String.class)
-                        ,dataSnapshot1.child("City").getValue(String.class)
-                        ,dataSnapshot1.child("Number").getValue(String.class)
-               ));
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()) { //loop for all items in DB
+                    if (dataSnapshot1.child("Sold").getValue(String.class).equals("not")) { //just available items - without SOLD
+                        itemArrayList1.add(new Item(
+                            dataSnapshot1.child("Name").getValue(String.class)
+                            , dataSnapshot1.child("ItemImage").getValue(String.class)
+                            , dataSnapshot1.child("Description").getValue(String.class)
+                            , dataSnapshot1.child("Quantity").getValue(String.class)
+                            , dataSnapshot1.child("OriginalPrice").getValue(String.class)
+                            , dataSnapshot1.child("Category").getValue(String.class)
+                            , dataSnapshot1.child("SubCategory").getValue(String.class)
+                            , dataSnapshot1.child("UserId").getValue(String.class)
+                            , dataSnapshot1.child("ItemId").getValue(String.class)
+                            , dataSnapshot1.child("AskingPrice").getValue(String.class)
+                            , dataSnapshot1.child("Date").getValue(String.class)
+                            , dataSnapshot1.child("City").getValue(String.class)
+                            , dataSnapshot1.child("Number").getValue(String.class)
+                        ));
+                    }
+                }
+                categoryAdapter=new CategoryAdapter();
+                listrecylerView.setAdapter(categoryAdapter);
+                categoryAdapter.notifyDataSetChanged();
+                loadingDialog.dismiss();
             }
-            categoryAdapter=new CategoryAdapter();
-            listrecylerView.setAdapter(categoryAdapter);
-            categoryAdapter.notifyDataSetChanged();
-            loadingDialog.dismiss();
-        }
 
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        }
-    });
+            }
+        });
 }
     public void getSpecificData(String name){
         loadingDialog.show();
@@ -168,23 +170,21 @@ public void getAllData(){
                     if(name.equals(dataSnapshot1.child("Category").getValue(String.class))){
                         if(dataSnapshot1.child("Sold").getValue(String.class).equals("not")){
                             itemArrayList1.add(new Item(
-                                    dataSnapshot1.child("Name").getValue(String.class)
-                                    ,dataSnapshot1.child("ItemImage").getValue(String.class)
-                                    ,dataSnapshot1.child("Description").getValue(String.class)
-                                    ,dataSnapshot1.child("Quantity").getValue(String.class)
-                                    ,dataSnapshot1.child("OriginalPrice").getValue(String.class)
-                                    ,dataSnapshot1.child("Category").getValue(String.class)
-                                    ,dataSnapshot1.child("SubCategory").getValue(String.class)
-                                    ,dataSnapshot1.child("UserId").getValue(String.class),
-                                    dataSnapshot1.child("ItemId").getValue(String.class)
-                                    , dataSnapshot1.child("AskingPrice").getValue(String.class)
-                                    ,dataSnapshot1.child("Date").getValue(String.class)
-                                    ,dataSnapshot1.child("City").getValue(String.class)
-                                    ,dataSnapshot1.child("Number").getValue(String.class)
+                                dataSnapshot1.child("Name").getValue(String.class)
+                                ,dataSnapshot1.child("ItemImage").getValue(String.class)
+                                ,dataSnapshot1.child("Description").getValue(String.class)
+                                ,dataSnapshot1.child("Quantity").getValue(String.class)
+                                ,dataSnapshot1.child("OriginalPrice").getValue(String.class)
+                                ,dataSnapshot1.child("Category").getValue(String.class)
+                                ,dataSnapshot1.child("SubCategory").getValue(String.class)
+                                ,dataSnapshot1.child("UserId").getValue(String.class),
+                                dataSnapshot1.child("ItemId").getValue(String.class)
+                                , dataSnapshot1.child("AskingPrice").getValue(String.class)
+                                ,dataSnapshot1.child("Date").getValue(String.class)
+                                ,dataSnapshot1.child("City").getValue(String.class)
+                                ,dataSnapshot1.child("Number").getValue(String.class)
                             ));
                         }
-
-
                     }
 
                 }
@@ -196,7 +196,6 @@ public void getAllData(){
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
@@ -212,11 +211,9 @@ public void getAllData(){
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
-
 
     public void getData(){
         loadingDialog.show();
@@ -231,7 +228,6 @@ public void getAllData(){
                         categoryArrayList.add(new Category(dataSnapshot1.child("Name").getValue(String.class)
                                 ,dataSnapshot1.child("Image").getValue(String.class)));
                     }
-
                 }
                 arrayAdapter =new ArrayAdapter();
                 recyclerView.setAdapter(arrayAdapter);
@@ -259,37 +255,31 @@ public void getAllData(){
 
         @Override
         public void onBindViewHolder(@NonNull final ArrayAdapter.ImageViewHoler holder, @SuppressLint("RecyclerView") int position) {
-                        if(categoryArrayList.get(position).getName().equals("All")){
-                             holder.cat_image.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_border_all_24));
-                        }
-                        else {
-                            Picasso.with(getContext())
-                                    .load(categoryArrayList.get(position).getImage())
-                                    .placeholder(R.drawable.progress_animation)
-                                    .fit()
-                                    .centerCrop()
-                                    .into(holder.cat_image);
-                        }
-
+            if(categoryArrayList.get(position).getName().equals("All")){
+                 holder.cat_image.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_border_all_24));
+            }
+            else {
+                Picasso.with(getContext())
+                        .load(categoryArrayList.get(position).getImage())
+                        .placeholder(R.drawable.progress_animation)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.cat_image);
+            }
 
             holder.name.setText(categoryArrayList.get(position).getName());
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                                if(categoryArrayList.get(position).getName().equals("All")){
-                                    loadingDialog.show();
-                                    getAllData();
-                                }
-                                else {
-
-                                    getSpecificData(categoryArrayList.get(position).getName());
-                                }
+                    if(categoryArrayList.get(position).getName().equals("All")){
+                        loadingDialog.show();
+                        getAllData();
+                    }
+                    else {
+                        getSpecificData(categoryArrayList.get(position).getName());
+                    }
                 }
             });
-
-
-
-
         }
 
         @Override
@@ -310,19 +300,17 @@ public void getAllData(){
         }
     }
 
-
     public void addToFav(String itemId){
         DatabaseReference  myRef=  FirebaseDatabase.getInstance().getReference().child("Favourite").child(getUserId(getContext())).child(itemId);
         myRef.child("itemId").setValue(itemId);
     }
+
     public void removeToFav(String itemId){
         DatabaseReference  myRef=  FirebaseDatabase.getInstance().getReference().child("Favourite").child(getUserId(getContext())).child(itemId);
         myRef.removeValue();
     }
 
-
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ImageViewHoler> {
-
         public CategoryAdapter(){
           itemArrayList=  itemArrayList1;
         }
@@ -367,7 +355,6 @@ public void getAllData(){
                 }
             });
 
-
                 Picasso.with(getContext())
                         .load(itemArrayList.get(position).getPic())
                         .placeholder(R.drawable.progress_animation)
@@ -390,19 +377,15 @@ public void getAllData(){
                                 .putExtra("index",position)
                                 .putExtra("status",false));
                     }
-
-
                 }
             });
-
-
-
-
         }
+
         public void filteredList(ArrayList<Item> filterlist) {
             itemArrayList=filterlist;
             notifyDataSetChanged();
         }
+
         @Override
         public int getItemCount() {
             return itemArrayList.size();
@@ -424,28 +407,27 @@ public void getAllData(){
         }
     }
 
-
     public  void checkPermission(){
         Dexter.withActivity(getActivity())
-                .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE
-                ,Manifest.permission.ACCESS_FINE_LOCATION)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted()) {
+            .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE
+            ,Manifest.permission.ACCESS_FINE_LOCATION)
+            .withListener(new MultiplePermissionsListener() {
+                @Override
+                public void onPermissionsChecked(MultiplePermissionsReport report) {
+                    if (report.areAllPermissionsGranted()) {
 
-                        }
-
-                        if (report.isAnyPermissionPermanentlyDenied()) {
-                            showSettingsDialog();
-                        }
                     }
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                        token.continuePermissionRequest();
+                    if (report.isAnyPermissionPermanentlyDenied()) {
+                        showSettingsDialog();
                     }
-                }).check();
+                }
+
+                @Override
+                public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                    token.continuePermissionRequest();
+                }
+            }).check();
     }
     private void showSettingsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -465,8 +447,8 @@ public void getAllData(){
             }
         });
         builder.show();
-//
     }
+
     private void openSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package",getContext().getPackageName(), null);

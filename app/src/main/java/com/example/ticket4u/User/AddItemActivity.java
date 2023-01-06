@@ -164,6 +164,9 @@ public class AddItemActivity extends AppCompatActivity {
 
 
 
+
+
+
     }
     public String createFavId() throws Exception{
         return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();

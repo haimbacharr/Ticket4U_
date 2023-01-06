@@ -21,14 +21,14 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -55,6 +55,5 @@ public class AdminActivity extends AppCompatActivity {
 
     public void viewReports(View view) {
         startActivity(new Intent(this,ReportActivity.class));
-
     }
 }

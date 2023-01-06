@@ -50,7 +50,6 @@ public class LoginFragment extends Fragment {
     private Dialog loadingDialog;
     private FirebaseAuth firebaseAuth;
 
-
     DatabaseReference myRef,databaseReference;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,19 +84,21 @@ public class LoginFragment extends Fragment {
         tv_forgot_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), ForgotPasswordActivity.class));
+                startActivity(new Intent(getContext(), ForgotPasswordActivity.class)); //open reset password page
             }
         });
+
         tv_new_register.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                ((AccountActivity)getActivity()).showSignUpScreen();
+            public void onClick(View view) {((AccountActivity)getActivity()).showSignUpScreen(); //open register page
             }
         });
+
         return view;
     }
+
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
-    private boolean validate(String email, String password) {
+    private boolean validate(String email, String password) { //check if email and password is valid
         if (email.isEmpty()) etLoginEmail.setError("Enter email!");
         else if (!email.contains("@")||!email.contains(".")) etLoginEmail.setError("Enter valid email!");
         else if (password.isEmpty()) etLoginPassword.setError("Enter password!");
@@ -105,72 +106,66 @@ public class LoginFragment extends Fragment {
         else return true;
         return false;
     }
-    private void requestLogin(String email, String password) {
+
+    private void requestLogin(String email, String password) { //check login details
         loadingDialog.show();
-
-
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener()  {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 // get the admin email and password from the firebase
-                String dbmail = dataSnapshot.child("AdminEmail").getValue().toString();
+                String dbmail = dataSnapshot.child("AdminEmail").getValue().toString(); //check the values in firebase for admin
                 String dbpass = dataSnapshot.child("AdminPassword").getValue().toString();
+
                 // validate the email and password
-                if (email.equals(dbmail) && password.equals(dbpass)) {
+                if (email.equals(dbmail) && password.equals(dbpass)) { //check if admin
                     // open the admin dashboard screen
                     loadingDialog.dismiss();
                     setAdminLoginStatus(getContext(),true);
                     startActivity(new Intent(getContext(), AdminActivity.class));
                     getActivity().finish();
-
                 }
-                else {
+                else { //check if user
                     firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
+                            if (!task.isSuccessful()) { //wrong details
                                 loadingDialog.dismiss();
                                 Toast.makeText(getContext(), "wrong mail or password" + task.getException(), Toast.LENGTH_LONG).show();
-                            } else if (task.isSuccessful()) {
-                                getData();
+                            } else if (task.isSuccessful()) { //email and password = OK
+                                getData(); //get the data for this user from db.
                             }
                         }
                     });
-
                 }
-
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
+
     private void getData(){
         final String user_m=etLoginEmail.getText().toString().trim();
-        myRef=  FirebaseDatabase.getInstance().getReference().child("User");
+        myRef=FirebaseDatabase.getInstance().getReference().child("User");
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
                     if(user_m.equals(dataSnapshot1.child("Mail").getValue(String.class))) {
-
                         setUserId(getContext(),dataSnapshot1.child("UserId").getValue(String.class));
                         setUsername(getContext(),dataSnapshot1.child("Name").getValue(String.class));
                         setUserNumber(getContext(),dataSnapshot1.child("PhoneNumber").getValue(String.class));
                         setUserCity(getContext(),dataSnapshot1.child("City").getValue(String.class));
-                        setUserLoginStatus(getContext(), true);
+                        setUserLoginStatus(getContext(), true); //turn on the login status
                         setUserEmail(getContext(),etLoginEmail.getText().toString().trim());
                         loadingDialog.dismiss();
-                        openHomeActivity();
+                        openHomeActivity(); //go to home screen
                     }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }

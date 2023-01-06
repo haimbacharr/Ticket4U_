@@ -73,9 +73,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         }
         else {
             imageView.setImageDrawable(getResources().getDrawable(R.drawable.logo));
-
         }
-
     }
 
     public void saveCategoryRecord(View view) {
@@ -89,7 +87,6 @@ public class AddCategoryActivity extends AppCompatActivity {
             else {
                 addRecord();
             }
-
         }
         else {
             DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Category")
@@ -106,7 +103,6 @@ public class AddCategoryActivity extends AppCompatActivity {
                     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                         while (!urlTask.isSuccessful()) ;
                         Uri downloadUrl = urlTask.getResult();
@@ -127,7 +123,6 @@ public class AddCategoryActivity extends AppCompatActivity {
                 .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-
                     }
                 });
 
@@ -158,6 +153,7 @@ public class AddCategoryActivity extends AppCompatActivity {
                     }
                 }).check();
     }
+
     private void showSettingsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(AddCategoryActivity.this);
         builder.setTitle(getString(R.string.dialog_permission_title));
@@ -176,14 +172,15 @@ public class AddCategoryActivity extends AppCompatActivity {
             }
         });
         builder.show();
-//
     }
+
     private void openSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package",AddCategoryActivity.this.getPackageName(), null);
         intent.setData(uri);
         startActivityForResult(intent, 101);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -191,13 +188,12 @@ public class AddCategoryActivity extends AppCompatActivity {
             imgUri  = data.getData();
             imageView.setImageURI(imgUri);
         }
-
     }
+
     // get the extension of file
     private String getFileEx(Uri uri){
         ContentResolver cr=AddCategoryActivity.this.getContentResolver();
         MimeTypeMap mime=MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(uri));
     }
-
 }

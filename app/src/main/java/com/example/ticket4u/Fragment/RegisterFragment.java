@@ -76,7 +76,7 @@ import java.util.Locale;
 
 public class RegisterFragment extends Fragment  {
     private EditText etRegisterEmail,et_user_name, etRegisterPassword, etRegisterConfirmPassword
-           ,et_register_country,et_register_state,et_register_city,et_user_number;
+           ,et_register_country,et_register_state=null,et_register_city=null,et_user_number;
     private FirebaseAuth firebaseAuth;
     DatabaseReference myRef;
     TextView tv_login;
@@ -94,7 +94,7 @@ public class RegisterFragment extends Fragment  {
     private static final int REQUEST_LOCATION = 1;
 
     protected LocationManager locationManager;
-    String latitude="",longitude="";
+    String latitude="",longitude=""; //values for location
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,10 +102,10 @@ public class RegisterFragment extends Fragment  {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_register, container, false);
 
-        ActivityCompat.requestPermissions( getActivity(),
-                new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        ActivityCompat.requestPermissions(getActivity(),
+                                new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-       // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+        // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             OnGPS();
         }
@@ -113,7 +113,6 @@ public class RegisterFragment extends Fragment  {
 
         // method to get the location
         getLastLocation();
-
 
         mRef= FirebaseStorage.getInstance().getReference("profile_images");
 
@@ -135,10 +134,9 @@ public class RegisterFragment extends Fragment  {
         etRegisterConfirmPassword = view.findViewById(R.id.et_register_confirm_password);
         et_user_name = view.findViewById(R.id.et_user_name);
         tv_login=view.findViewById(R.id.tv_login);
-
         spinner =view.findViewById(R.id.spinner);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { //set the spinner for select interested category
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 category =  stringArrayList.get(position);
@@ -150,15 +148,13 @@ public class RegisterFragment extends Fragment  {
             }
         });
 
-
-
-
-        tv_login.setOnClickListener(new View.OnClickListener() {
+        tv_login.setOnClickListener(new View.OnClickListener() { //return to login page
             @Override
             public void onClick(View view) {
                 ((AccountActivity)getActivity()).showLoginScreen();
             }
         });
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,11 +176,12 @@ public class RegisterFragment extends Fragment  {
                 if (validate(email,name, password, confirm_password,user_number,register_country)) requestRegister(email, password);
             }
         });
+
         getData();
         return view;
     }
-    private void getLastLocation() {
 
+    private void getLastLocation() {
         mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
@@ -192,15 +189,15 @@ public class RegisterFragment extends Fragment  {
                 if (location == null) {
                     requestNewLocationData();
                 } else {
-                    latitude=location.getLatitude()+"";
+                    latitude=location.getLatitude()+""; //update the location we get.
                     longitude=location.getLongitude()+"";
                    // Toast.makeText(getContext(), "Latitude:" + location.getLatitude() + ", Longitude:" +location.getLongitude(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        }
-    private void requestNewLocationData() {
+    }
 
+    private void requestNewLocationData() {
         // Initializing LocationRequest
         // object with appropriate methods
         LocationRequest mLocationRequest = new LocationRequest();
@@ -214,6 +211,7 @@ public class RegisterFragment extends Fragment  {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
     }
+
     private LocationCallback mLocationCallback = new LocationCallback() {
 
         @Override
@@ -225,10 +223,6 @@ public class RegisterFragment extends Fragment  {
 
         }
     };
-
-
-
-
 
     private void OnGPS() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -252,7 +246,7 @@ public class RegisterFragment extends Fragment  {
         loadingDialog.show();
         stringArrayList.clear();
         stringArrayList.add("General");
-        DatabaseReference databaseReference  =  FirebaseDatabase.getInstance().getReference().child("Category");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Category");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -260,7 +254,6 @@ public class RegisterFragment extends Fragment  {
                     if(!stringArrayList.contains(dataSnapshot1.child("Name").getValue(String.class))){
                         stringArrayList.add(dataSnapshot1.child("Name").getValue(String.class));
                     }
-
                 }
                 loadingDialog.dismiss();
                 arrayAdapter = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,stringArrayList);
@@ -275,7 +268,6 @@ public class RegisterFragment extends Fragment  {
             }
         });
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     private boolean validate(String email, String name, String password, String confirm_password, String user_number, String register_address) {
@@ -301,6 +293,7 @@ public class RegisterFragment extends Fragment  {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getCreateUserWithEmailOnClickListener(email));
     }
+
     private OnCompleteListener<AuthResult> getCreateUserWithEmailOnClickListener(String email) {
         return task -> {
             if (task.isSuccessful()) {
@@ -308,25 +301,26 @@ public class RegisterFragment extends Fragment  {
             } else {
                 loadingDialog.dismiss();
                 Toast.makeText(getContext(),"Registration failed!",Toast.LENGTH_LONG).show();
-
             }
         };
     }
 
-    private void add(){
+    private void add(){ //create the uiser to add.
         getLastLocation();
         String id = firebaseAuth.getCurrentUser().getUid();
         StorageReference storageReference = mRef.child(System.currentTimeMillis() + "." + getFileEx(imgUri));
+/*        if(imgUri == null){
+            imgUri = no_user_face.jpg;
+        }*/
         storageReference.putFile(imgUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                         while (!urlTask.isSuccessful()) ;
                         Uri downloadUrl = urlTask.getResult();
-                        myRef=  FirebaseDatabase.getInstance().getReference("User").child(id);
+                        myRef=FirebaseDatabase.getInstance().getReference("User").child(id);
                         myRef.child("Name").setValue(et_user_name.getText().toString());
                         myRef.child("UserId").setValue(id);
                         myRef.child("Mail").setValue(etRegisterEmail.getText().toString());
@@ -383,6 +377,7 @@ public class RegisterFragment extends Fragment  {
                     }
                 }).check();
     }
+
     private void showSettingsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.dialog_permission_title));
@@ -401,8 +396,8 @@ public class RegisterFragment extends Fragment  {
             }
         });
         builder.show();
-//
     }
+
     private void openSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package",getContext().getPackageName(), null);

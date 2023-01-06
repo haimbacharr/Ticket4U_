@@ -89,14 +89,12 @@ public class AdminMainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ImageViewHoler> {
 
         public CategoryAdapter(){
-
         }
         @NonNull
         @Override
@@ -107,21 +105,13 @@ public class AdminMainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull final CategoryAdapter.ImageViewHoler holder, @SuppressLint("RecyclerView") int position) {
-
-
-                holder.fav_icon.setVisibility(View.GONE);
-
-
-
-
-
+            holder.fav_icon.setVisibility(View.GONE);
             Picasso.with(AdminMainActivity.this)
                     .load(itemArrayList.get(position).getPic())
                     .placeholder(R.drawable.progress_animation)
                     .fit()
                     .centerCrop()
                     .into(holder.cat_image);
-
 
             holder.name.setText(itemArrayList.get(position).getName());
             holder.price.setText("Price "+itemArrayList.get(position).getOriginalPrice()+" $");
@@ -137,7 +127,6 @@ public class AdminMainActivity extends AppCompatActivity {
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
                             FirebaseDatabase.getInstance().getReference("Items").child(itemArrayList.get(position).getItemId()).removeValue();
                                                getAllData();
                                        dialog.dismiss();
@@ -156,10 +145,6 @@ public class AdminMainActivity extends AppCompatActivity {
                     dialog.show();
                 }
             });
-
-
-
-
         }
 
         @Override
@@ -182,7 +167,4 @@ public class AdminMainActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
 }

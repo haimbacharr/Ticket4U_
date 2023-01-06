@@ -50,16 +50,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         resetbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String eemail =   email.getText().toString();
+                String eemail = email.getText().toString();
 
                 if (TextUtils.isEmpty(eemail)){
-
                     Toast.makeText(ForgotPasswordActivity.this, "Enter Your Email", Toast.LENGTH_SHORT).show();
                 }
-
                 else {
-
                     textView.setVisibility(View.GONE);
                     imageView1.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
@@ -68,9 +64,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-
                                     if (task.isSuccessful()){
-
                                         Toast.makeText(ForgotPasswordActivity.this, "Email Sent Successfully !", Toast.LENGTH_SHORT).show();
                                         imageView1.setImageResource(R.drawable.green_email);
                                         textView.setVisibility(View.VISIBLE);
@@ -79,9 +73,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                                         resetbutton.setEnabled(false);
                                         resetbutton.setBackgroundColor(Color.parseColor("#b5261c"));
                                         resetbutton.setTextColor(Color.parseColor("#cccccc"));
-
-                                    }else {
-
+                                    }else { //if the email is not exist
                                         String error = task.getException().getMessage();
                                         Toast.makeText(ForgotPasswordActivity.this, error, Toast.LENGTH_SHORT).show();
                                         textView.setText(error);
@@ -89,13 +81,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                                         textView.setVisibility(View.VISIBLE);
                                     }
                                     progressBar.setVisibility(View.GONE);
-
                                 }
                             });
-
-
                 }}
         });
-
     }
 }

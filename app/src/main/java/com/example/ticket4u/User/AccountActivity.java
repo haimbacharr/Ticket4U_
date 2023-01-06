@@ -15,7 +15,6 @@ public class AccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
         if(getIntent().getStringExtra("screen").equals("login")){
-
             showLoginScreen();
         }
         else {

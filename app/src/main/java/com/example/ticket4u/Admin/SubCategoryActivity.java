@@ -75,7 +75,6 @@ public class SubCategoryActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
@@ -89,7 +88,6 @@ public class SubCategoryActivity extends AppCompatActivity {
     public class ArrayAdapter extends RecyclerView.Adapter<ArrayAdapter.ImageViewHoler> {
 
         public ArrayAdapter(){
-
         }
         @NonNull
         @Override
@@ -100,8 +98,6 @@ public class SubCategoryActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull final ArrayAdapter.ImageViewHoler holder, @SuppressLint("RecyclerView") int position) {
-
-
             holder.name.setText(stringArrayList.get(position));
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -125,10 +121,6 @@ public class SubCategoryActivity extends AppCompatActivity {
                     builder.show();
                 }
             });
-
-
-
-
         }
 
         @Override

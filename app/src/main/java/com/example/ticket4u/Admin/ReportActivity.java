@@ -73,9 +73,9 @@ public class ReportActivity extends AppCompatActivity {
                                         ,dataSnapshot1.child("OriginalPrice").getValue(String.class)
                                         ,dataSnapshot1.child("Category").getValue(String.class)
                                         ,dataSnapshot1.child("SubCategory").getValue(String.class)
-                                        ,dataSnapshot1.child("UserId").getValue(String.class),
-                                        dataSnapshot1.child("ItemId").getValue(String.class)
-                                        , dataSnapshot1.child("AskingPrice").getValue(String.class)
+                                        ,dataSnapshot1.child("UserId").getValue(String.class)
+                                        ,dataSnapshot1.child("ItemId").getValue(String.class)
+                                        ,dataSnapshot1.child("AskingPrice").getValue(String.class)
                                         ,dataSnapshot1.child("Date").getValue(String.class)
                                 ));
                                 categoryAdapter.notifyDataSetChanged();
@@ -84,7 +84,6 @@ public class ReportActivity extends AppCompatActivity {
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
                         }
                     });
                 }
@@ -95,14 +94,12 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ImageViewHoler> {
 
         public CategoryAdapter(){
-
         }
         @NonNull
         @Override
@@ -113,21 +110,13 @@ public class ReportActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull final CategoryAdapter.ImageViewHoler holder, @SuppressLint("RecyclerView") int position) {
-
-
             holder.fav_icon.setVisibility(View.GONE);
-
-
-
-
-
             Picasso.with(ReportActivity.this)
                     .load(itemArrayList.get(position).getPic())
                     .placeholder(R.drawable.progress_animation)
                     .fit()
                     .centerCrop()
                     .into(holder.cat_image);
-
 
             holder.name.setText(itemArrayList.get(position).getName());
             holder.price.setText("Price "+itemArrayList.get(position).getOriginalPrice()+" $");
@@ -139,10 +128,6 @@ public class ReportActivity extends AppCompatActivity {
                             .putExtra("itemId",itemArrayList.get(position).getItemId()));
                 }
             });
-
-
-
-
         }
 
         @Override

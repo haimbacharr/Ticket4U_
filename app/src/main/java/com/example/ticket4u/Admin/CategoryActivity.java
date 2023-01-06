@@ -48,11 +48,10 @@ public class CategoryActivity extends AppCompatActivity {
         loadingDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
          myRef=  FirebaseDatabase.getInstance().getReference().child("Category");
-
         recyclerView=findViewById(R.id.recylerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
     }
+
     @Override
     protected void onStart() {
         getData();
@@ -71,7 +70,6 @@ public class CategoryActivity extends AppCompatActivity {
                         stringArrayList.add(new Category(dataSnapshot1.child("Name").getValue(String.class)
                                 ,dataSnapshot1.child("Image").getValue(String.class)));
                     }
-
                 }
                 arrayAdapter =new ArrayAdapter();
                 recyclerView.setAdapter(arrayAdapter);
@@ -81,21 +79,17 @@ public class CategoryActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
 
     public void addCategory(View view) {
-
         startActivity(new Intent(this,AddCategoryActivity.class)
                 .putExtra("name","empty"));
     }
 
     public class ArrayAdapter extends RecyclerView.Adapter<ArrayAdapter.ImageViewHoler> {
-
         public ArrayAdapter(){
-
         }
         @NonNull
         @Override
@@ -106,7 +100,6 @@ public class CategoryActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull final ArrayAdapter.ImageViewHoler holder, @SuppressLint("RecyclerView") int position) {
-
             Picasso.with(CategoryActivity.this)
                     .load(stringArrayList.get(position).getImage())
                     .placeholder(R.drawable.progress_animation)
@@ -115,7 +108,7 @@ public class CategoryActivity extends AppCompatActivity {
                     .into(holder.cat_image);
 
             holder.name.setText(stringArrayList.get(position).getName());
-             holder.cardView.setOnClickListener(new View.OnClickListener() {
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View view) {
                      final CharSequence[] options = {"Delete","View Sub Category", "Cancel"};
@@ -141,10 +134,6 @@ public class CategoryActivity extends AppCompatActivity {
                      builder.show();
                  }
              });
-
-
-
-
         }
 
         @Override

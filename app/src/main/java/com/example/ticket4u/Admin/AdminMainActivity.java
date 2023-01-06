@@ -167,4 +167,25 @@ public class AdminMainActivity extends AppCompatActivity {
             }
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.logout:
+                setAdminLoginStatus(AdminMainActivity.this,false);
+                setUserLoginStatus(AdminMainActivity.this,false);
+                startActivity(new Intent(AdminMainActivity.this, MainActivity.class));
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

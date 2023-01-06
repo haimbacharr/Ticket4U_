@@ -1,5 +1,8 @@
 package com.example.ticket4u.Admin;
 
+import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
+import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -13,11 +16,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ticket4u.MainActivity;
 import com.example.ticket4u.Model.Item;
 import com.example.ticket4u.R;
 import com.google.firebase.database.DataSnapshot;
@@ -148,6 +154,27 @@ public class ReportActivity extends AppCompatActivity {
                 cat_image=itemView.findViewById(R.id.imageView);
                 cardView=itemView.findViewById(R.id.card);
             }
+        }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.logout:
+                setAdminLoginStatus(ReportActivity.this,false);
+                setUserLoginStatus(ReportActivity.this,false);
+                startActivity(new Intent(ReportActivity.this, MainActivity.class));
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

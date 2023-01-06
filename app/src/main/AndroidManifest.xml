@@ -33,11 +33,12 @@
         <activity
             android:name=".Admin.ViewReportActivity"
             android:exported="true"
+            android:label="Admin -> Reported items "
             android:parentActivityName=".Admin.ReportActivity" />
         <activity
             android:name=".Admin.ReportActivity"
             android:exported="true"
-            android:label="Report List"
+            android:label="Admin -> Reported items"
             android:parentActivityName=".Admin.AdminActivity" />
         <activity
             android:name=".User.AddReportActivity"
@@ -45,7 +46,9 @@
             android:parentActivityName=".User.DetailActivity" />
         <activity
             android:name=".Admin.AdminActivity"
-            android:exported="true" />
+            android:label="Admin -> main"
+            android:exported="true"
+            android:parentActivityName=".Fragment.LoginFragment"/>
         <activity
             android:name=".User.DetailActivity"
             android:exported="false"
@@ -76,6 +79,7 @@
             android:parentActivityName=".User.DetailActivity" />
         <activity
             android:name=".Admin.AddCategoryActivity"
+            android:label="Admin -> View categories -> Add category"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -84,6 +88,7 @@
         <activity
             android:name=".Admin.SubCategoryActivity"
             android:exported="false"
+            android:label="Admin -> View Sub-category"
             android:parentActivityName=".Admin.CategoryActivity">
             <meta-data
                 android:name="android.app.lib_name"
@@ -92,6 +97,7 @@
         <activity
             android:name=".Admin.CategoryActivity"
             android:exported="false"
+            android:label="Admin -> View Categories"
             android:parentActivityName=".Admin.AdminActivity">
             <meta-data
                 android:name="android.app.lib_name"
@@ -108,6 +114,7 @@
         <activity
             android:name=".Admin.AdminMainActivity"
             android:exported="false"
+            android:label="Admin -> View Items"
             android:parentActivityName=".Admin.AdminActivity" />
         <activity
             android:name=".Screens.SplashActivity"

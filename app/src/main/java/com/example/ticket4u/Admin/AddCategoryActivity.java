@@ -1,5 +1,8 @@
 package com.example.ticket4u.Admin;
 
+import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
+import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -15,6 +18,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
@@ -22,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.ticket4u.MainActivity;
 import com.example.ticket4u.R;
 import com.example.ticket4u.User.AccountActivity;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -195,5 +201,27 @@ public class AddCategoryActivity extends AppCompatActivity {
         ContentResolver cr=AddCategoryActivity.this.getContentResolver();
         MimeTypeMap mime=MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(uri));
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.logout:
+                setAdminLoginStatus(AddCategoryActivity.this,false);
+                setUserLoginStatus(AddCategoryActivity.this,false);
+                startActivity(new Intent(AddCategoryActivity.this, MainActivity.class));
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

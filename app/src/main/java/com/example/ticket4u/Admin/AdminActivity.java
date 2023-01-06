@@ -16,6 +16,7 @@ import com.example.ticket4u.R;
 
 public class AdminActivity extends AppCompatActivity {
 
+    /* this method will display the main screen of the admin after he will login */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

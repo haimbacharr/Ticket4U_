@@ -84,7 +84,7 @@ public class RegisterFragment extends Fragment  {
     private Dialog loadingDialog;
     ImageView imageView;
     StorageReference mRef;
-    private Uri imgUri =null;
+    private Uri imgUri;
     ArrayList<String> stringArrayList=new ArrayList<String>();
     Spinner spinner;
     ArrayAdapter arrayAdapter;
@@ -139,7 +139,7 @@ public class RegisterFragment extends Fragment  {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { //set the spinner for select interested category
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                category =  stringArrayList.get(position);
+                category = stringArrayList.get(position);
             }
 
             @Override
@@ -172,8 +172,10 @@ public class RegisterFragment extends Fragment  {
                 String password = etRegisterPassword.getText().toString();
                 String confirm_password = etRegisterConfirmPassword.getText().toString();
                 String user_number =et_user_number.getText().toString();
-                String register_country =et_register_country.getText().toString();
-                if (validate(email,name, password, confirm_password,user_number,register_country)) requestRegister(email, password);
+                String register_country =et_register_country.getText().toString(); //3 optional fields
+                String register_state = et_register_state.getText().toString();
+                String register_city = et_register_city.getText().toString();
+                if (validate(email,name, password, confirm_password,user_number)) requestRegister(email, password);
             }
         });
 
@@ -220,7 +222,6 @@ public class RegisterFragment extends Fragment  {
             latitude=mLastLocation.getLatitude()+"";
             longitude=mLastLocation.getLongitude()+"";
            // Toast.makeText(getContext(), "Latitude:" + mLastLocation.getLatitude() + ", Longitude:" +mLastLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-
         }
     };
 
@@ -270,13 +271,9 @@ public class RegisterFragment extends Fragment  {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
-    private boolean validate(String email, String name, String password, String confirm_password, String user_number, String register_address) {
+    private boolean validate(String email, String name, String password, String confirm_password, String user_number) {
         if (email.isEmpty()) etRegisterEmail.setError("Enter email!");
-        else if (imgUri==null) Toast.makeText(getContext(),"select your image",Toast.LENGTH_LONG).show();
-        else if (register_address.isEmpty()) et_register_country.setError("Enter country!");
-        else if (et_register_state.getText().toString().isEmpty()) et_register_state.setError("Enter state!");
-        else if (et_register_city.getText().toString().isEmpty()) et_register_city.setError("Enter city!");
-
+//        else if (imgUri==null) Toast.makeText(getContext(),"select your image",Toast.LENGTH_LONG).show();
         else if (user_number.isEmpty()) et_user_number.setError("Enter phone number!");
         else if (name.isEmpty()) et_user_name.setError("Enter name!");
         else if (!email.contains("@")||!email.contains(".")) etRegisterEmail.setError("Enter valid email!");
@@ -305,58 +302,62 @@ public class RegisterFragment extends Fragment  {
         };
     }
 
-    private void add(){ //create the uiser to add.
+    private void add() {
         getLastLocation();
         String id = firebaseAuth.getCurrentUser().getUid();
-        StorageReference storageReference = mRef.child(System.currentTimeMillis() + "." + getFileEx(imgUri));
-/*        if(imgUri == null){
-            imgUri = no_user_face.jpg;
-        }*/
-        storageReference.putFile(imgUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                        while (!urlTask.isSuccessful()) ;
-                        Uri downloadUrl = urlTask.getResult();
-                        myRef=FirebaseDatabase.getInstance().getReference("User").child(id);
-                        myRef.child("Name").setValue(et_user_name.getText().toString());
-                        myRef.child("UserId").setValue(id);
-                        myRef.child("Mail").setValue(etRegisterEmail.getText().toString());
-                        myRef.child("Country").setValue(et_register_country.getText().toString());
-                        myRef.child("City").setValue(et_register_city.getText().toString());
-                        myRef.child("State").setValue(et_register_state.getText().toString());
-                        myRef.child("Category").setValue(category);
-                        myRef.child("PhoneNumber").setValue(et_user_number.getText().toString());
-                        myRef.child("Latitude").setValue(latitude);
-                        myRef.child("Longitude").setValue(longitude);
-                        myRef.child("UserImage").setValue(downloadUrl.toString());
-                        loadingDialog.dismiss();
-                        Toast.makeText(getContext(),"Registration successful",Toast.LENGTH_LONG).show();
-                        ((AccountActivity)getActivity()).showLoginScreen();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        loadingDialog.dismiss();
-                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                })
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+        myRef = FirebaseDatabase.getInstance().getReference("User").child(id);
+        myRef.child("Name").setValue(et_user_name.getText().toString());
+        myRef.child("UserId").setValue(id);
+        myRef.child("Mail").setValue(etRegisterEmail.getText().toString());
+        myRef.child("Country").setValue(et_register_country.getText().toString());
+        myRef.child("City").setValue(et_register_city.getText().toString());
+        myRef.child("State").setValue(et_register_state.getText().toString());
+        myRef.child("Category").setValue(category);
+        myRef.child("PhoneNumber").setValue(et_user_number.getText().toString());
+        myRef.child("Latitude").setValue(latitude);
+        myRef.child("Longitude").setValue(longitude);
+        if(imgUri == null) {
+            // Set default image URL in Realtime Database
+            String defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/ticket4u-bd3b6.appspot.com/o/profile_images%2Fdefault-image.jpg?alt=media&token=fdc5e3aa-4fa2-44ad-8940-9ed400662cff";
+            myRef.child("UserImage").setValue(defaultImageUrl);
+        }
+        // Check if imgUri is not null -> set real image.
+        else{
+            // Upload image to Firebase Storage
+            StorageReference storageReference = mRef.child(System.currentTimeMillis() + "." + getFileEx(imgUri));
+            storageReference.putFile(imgUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Get download URL for image
+                            Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                            while (!urlTask.isSuccessful()) ;
+                            Uri downloadUrl = urlTask.getResult();
+                            // Set "UserImage" child in Realtime Database to download URL
+                            myRef.child("UserImage").setValue(downloadUrl.toString());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            loadingDialog.dismiss();
+                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
 
-                    }
-                });
+        loadingDialog.dismiss();
+        Toast.makeText(getContext(),"Registration successful",Toast.LENGTH_LONG).show();
+        ((AccountActivity)getActivity()).showLoginScreen();
     }
+
     public void selectImageFromGallery(){
-        Intent intent=new Intent(Intent.ACTION_PICK,android.provider. MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent=new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent,1);
     }
 
-    public  void addImage(){
+    public void addImage(){
         Dexter.withActivity(getActivity())
                 .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
                 .withListener(new MultiplePermissionsListener() {
@@ -408,16 +409,15 @@ public class RegisterFragment extends Fragment  {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
-            imgUri  = data.getData();
+            imgUri = data.getData();
             imageView.setImageURI(imgUri);
         }
-
     }
+
     // get the extension of file
     private String getFileEx(Uri uri){
         ContentResolver cr=getContext().getContentResolver();
         MimeTypeMap mime=MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(uri));
     }
-
 }

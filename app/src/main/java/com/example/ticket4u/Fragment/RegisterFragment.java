@@ -8,10 +8,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
@@ -26,7 +23,6 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +36,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ticket4u.Model.Category;
 import com.example.ticket4u.R;
 import com.example.ticket4u.User.AccountActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -60,7 +55,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.karumi.dexter.Dexter;
@@ -71,12 +65,11 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 public class RegisterFragment extends Fragment  {
     private EditText etRegisterEmail,et_user_name, etRegisterPassword, etRegisterConfirmPassword
-           ,et_register_country,et_register_state=null,et_register_city=null,et_user_number;
+           ,et_register_country, et_register_address =null,et_register_city=null,et_user_number;
     private FirebaseAuth firebaseAuth;
     DatabaseReference myRef;
     TextView tv_login;
@@ -116,7 +109,7 @@ public class RegisterFragment extends Fragment  {
         imageView=view.findViewById(R.id.userPic);
         et_user_number=view.findViewById(R.id.et_user_number);
         et_register_country=view.findViewById(R.id.et_register_country);
-        et_register_state=view.findViewById(R.id.et_register_state);
+        et_register_address =view.findViewById(R.id.et_register_address);
         et_register_city=view.findViewById(R.id.et_register_city);
         /////loading dialog
         loadingDialog=new Dialog(getContext());
@@ -168,7 +161,7 @@ public class RegisterFragment extends Fragment  {
                 String confirm_password = etRegisterConfirmPassword.getText().toString();
                 String user_number =et_user_number.getText().toString();
                 String register_country =et_register_country.getText().toString(); //3 optional fields
-                String register_state = et_register_state.getText().toString();
+                String register_address = et_register_address.getText().toString();
                 String register_city = et_register_city.getText().toString();
                 if (validate(email,name, password, confirm_password,user_number)) requestRegister(email, password);
             }
@@ -303,7 +296,7 @@ public class RegisterFragment extends Fragment  {
         myRef.child("Mail").setValue(etRegisterEmail.getText().toString());
         myRef.child("Country").setValue(et_register_country.getText().toString());
         myRef.child("City").setValue(et_register_city.getText().toString());
-        myRef.child("State").setValue(et_register_state.getText().toString());
+        myRef.child("Address").setValue(et_register_address.getText().toString());
         myRef.child("Category").setValue(category);
         myRef.child("PhoneNumber").setValue(et_user_number.getText().toString());
         myRef.child("Latitude").setValue(latitude);

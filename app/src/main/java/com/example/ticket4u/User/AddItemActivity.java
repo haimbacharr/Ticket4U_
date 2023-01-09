@@ -11,16 +11,20 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +53,8 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -57,6 +63,7 @@ import java.util.UUID;
 
 public class AddItemActivity extends AppCompatActivity {
     private EditText et_item_name,et_item_asking_price,et_item_original_price, et_item_quantity, et_description,et_item_date;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     DatabaseReference myRef;
     private Dialog loadingDialog;
@@ -78,6 +85,9 @@ public class AddItemActivity extends AppCompatActivity {
         et_item_quantity=findViewById(R.id.et_item_quantity);
         et_description=findViewById(R.id.et_description);
         et_item_date=findViewById(R.id.et_item_date);
+        TextView textview = findViewById(R.id.textView3);
+        Button et_btn_captureImage=findViewById(R.id.captureImage);
+        Button et_btn_detecttext=findViewById(R.id.detectText);
         /////loading dialog
         loadingDialog=new Dialog(this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -96,6 +106,21 @@ public class AddItemActivity extends AppCompatActivity {
             }
         };
 
+        et_btn_captureImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchTakePictureIntent();
+                textview.setText("");
+            }
+        });
+
+        et_btn_detecttext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                detectTextFromImage();
+            }
+        });
+
         et_item_date.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
             @Override
@@ -105,6 +130,9 @@ public class AddItemActivity extends AppCompatActivity {
                 datePicker.show();
             }
         });
+    }
+
+    private void detectTextFromImage() {
     }
 
     public void saveRecord(View view) {
@@ -228,17 +256,59 @@ public class AddItemActivity extends AppCompatActivity {
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
+            super.onActivityResult(requestCode, resultCode, data);
             imgUri  = data.getData();
             imageView.setImageURI(imgUri);
         }
 
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+        }
     }
+
     // get the extension of file
     private String getFileEx(Uri uri){
         ContentResolver cr=AddItemActivity.this.getContentResolver();
         MimeTypeMap mime=MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(uri));
     }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
+        } catch (ActivityNotFoundException e) {
+            //
+        }
+    }
+/*
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            ...
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    */
 }

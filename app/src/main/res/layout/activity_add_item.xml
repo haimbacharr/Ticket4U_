@@ -31,6 +31,27 @@
                 android:src="@drawable/upload_icon"
                 tools:ignore="ContentDescription" />
 
+            <Button
+                android:id="@+id/captureImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="capture image" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_weight="1"
+                android:text="TextView" />
+
+            <Button
+                android:id="@+id/detectText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="detectText" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_item_name"
                 android:layout_width="match_parent"
@@ -135,6 +156,7 @@
                 android:text="save"
                 app:backgroundTint="@color/peach"
                 tools:ignore="HardcodedText" />
+
         </LinearLayout>
     </ScrollView>
 

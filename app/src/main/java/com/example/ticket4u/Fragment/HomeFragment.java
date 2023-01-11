@@ -1,5 +1,7 @@
 package com.example.ticket4u.Fragment;
 
+import static android.content.ContentValues.TAG;
+import static com.example.ticket4u.Fragment.SelectCategoryFragment.CATEGORY;
 import static com.example.ticket4u.Utils.Constant.getUserId;
 import static com.example.ticket4u.Utils.Constant.getUserLoginStatus;
 
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +33,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.ticket4u.Model.Category;
 import com.example.ticket4u.Model.Item;
 import com.example.ticket4u.R;
+import com.example.ticket4u.User.AddItemActivity;
 import com.example.ticket4u.User.DetailActivity;
+import com.example.ticket4u.Utils.MySingleton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,8 +53,13 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class HomeFragment extends Fragment {
@@ -128,23 +140,27 @@ public class HomeFragment extends Fragment {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()) { //loop for all items in DB
-                    if (dataSnapshot1.child("Sold").getValue(String.class).equals("not")) { //just available items - without SOLD
-                        itemArrayList1.add(new Item(
-                            dataSnapshot1.child("Name").getValue(String.class)
-                            , dataSnapshot1.child("ItemImage").getValue(String.class)
-                            , dataSnapshot1.child("Description").getValue(String.class)
-                            , dataSnapshot1.child("Quantity").getValue(String.class)
-                            , dataSnapshot1.child("OriginalPrice").getValue(String.class)
-                            , dataSnapshot1.child("Category").getValue(String.class)
-                            , dataSnapshot1.child("SubCategory").getValue(String.class)
-                            , dataSnapshot1.child("UserId").getValue(String.class)
-                            , dataSnapshot1.child("ItemId").getValue(String.class)
-                            , dataSnapshot1.child("AskingPrice").getValue(String.class)
-                            , dataSnapshot1.child("Date").getValue(String.class)
-                            , dataSnapshot1.child("City").getValue(String.class)
-                            , dataSnapshot1.child("Number").getValue(String.class)
-                        ));
+                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()) {
+                    try {//loop for all items in DB
+                        if (dataSnapshot1.child("Sold").getValue(String.class).equals("not")) { //just available items - without SOLD
+                            itemArrayList1.add(new Item(
+                                    dataSnapshot1.child("Name").getValue(String.class)
+                                    , dataSnapshot1.child("ItemImage").getValue(String.class)
+                                    , dataSnapshot1.child("Description").getValue(String.class)
+                                    , dataSnapshot1.child("Quantity").getValue(String.class)
+                                    , dataSnapshot1.child("OriginalPrice").getValue(String.class)
+                                    , dataSnapshot1.child("Category").getValue(String.class)
+                                    , dataSnapshot1.child("SubCategory").getValue(String.class)
+                                    , dataSnapshot1.child("UserId").getValue(String.class)
+                                    , dataSnapshot1.child("ItemId").getValue(String.class)
+                                    , dataSnapshot1.child("AskingPrice").getValue(String.class)
+                                    , dataSnapshot1.child("Date").getValue(String.class)
+                                    , dataSnapshot1.child("City").getValue(String.class)
+                                    , dataSnapshot1.child("Number").getValue(String.class)
+                            ));
+                        }
+                    }catch (NullPointerException e){
+                    }catch (Exception e){
                     }
                 }
                 categoryAdapter=new CategoryAdapter();
@@ -429,6 +445,7 @@ public class HomeFragment extends Fragment {
                 }
             }).check();
     }
+
     private void showSettingsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.dialog_permission_title));

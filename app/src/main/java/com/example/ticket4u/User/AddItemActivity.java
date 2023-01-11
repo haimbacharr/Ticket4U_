@@ -1,5 +1,6 @@
 package com.example.ticket4u.User;
 
+import static android.content.ContentValues.TAG;
 import static com.example.ticket4u.Fragment.SelectCategoryFragment.CATEGORY;
 import static com.example.ticket4u.Fragment.SelectCategoryFragment.SUBCATEGORY;
 import static com.example.ticket4u.Utils.Constant.getUserCity;
@@ -22,6 +23,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
@@ -32,6 +34,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.ticket4u.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -49,10 +53,15 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 public class AddItemActivity extends AppCompatActivity {
@@ -137,6 +146,25 @@ public class AddItemActivity extends AppCompatActivity {
                             myRef.child("Number").setValue(getUserNumber(AddItemActivity.this));
                             myRef.child("City").setValue(getUserCity(AddItemActivity.this));
                             loadingDialog.dismiss();
+
+
+                            String TOPIC = "/topics/"+CATEGORY; //topic has to match what the receiver subscribed to
+                            JSONObject notification = new JSONObject();
+                            JSONObject notifcationBody = new JSONObject();
+                            String title = "New Ticket";
+                            String message = "There is new ticket in the system from category "+CATEGORY;
+                            try {
+                                notifcationBody.put("title", title);
+                                notifcationBody.put("message", message);
+                                notification.put("to", TOPIC);
+                                notification.put("priority", "high");
+                                notification.put("data", notifcationBody);
+                            } catch (JSONException e) {
+                                Log.e(TAG, "onCreate: " + e.getMessage());
+                            }
+                            Notification(notification);
+
+
                             Toast.makeText(AddItemActivity.this,"item Add successful",Toast.LENGTH_LONG).show();
                             finish();
 
@@ -161,12 +189,24 @@ public class AddItemActivity extends AppCompatActivity {
             loadingDialog.dismiss();
             e.printStackTrace();
         }
+    }
 
-
-
-
-
-
+    private void Notification(JSONObject notification) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://fcm.googleapis.com/fcm/send", notification,
+                response -> Log.i(TAG, "onResponse: " + response.toString()),
+                error -> {
+                    Toast.makeText(AddItemActivity.this, "Request error", Toast.LENGTH_LONG).show();
+                    Log.i(TAG, "onErrorResponse: Didn't work");
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", "key=AAAAVTl44Rg:APA91bGPv8PgIedleucA7iJgZoFkadH8ZynS3184YwbADiVFiPQIyBM0JWD1EUvEzJBGzaJFqCE_5mV3QJ3ZbQCTRJ60INmgHwmmeZT_fHb7yzjjUy4aiEf9ytUOePnu001lbYuy4yrk");
+                params.put("Content-Type", "application/json");
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
     }
     public String createFavId() throws Exception{
         return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();

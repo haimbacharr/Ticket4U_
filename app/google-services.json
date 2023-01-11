@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "366036443416-e0qqpcldof69u3devpumto8tp1v5dumi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ticket4u",
+            "certificate_hash": "6e1b0a876f1fa5a84361435d9981705ab5454d46"
+          }
+        },
+        {
           "client_id": "366036443416-g7g7l7uemgmn6fqsv327fq8s4ig58r9e.apps.googleusercontent.com",
           "client_type": 3
         }

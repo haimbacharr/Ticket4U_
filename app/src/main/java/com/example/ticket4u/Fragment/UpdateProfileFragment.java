@@ -1,6 +1,7 @@
 package com.example.ticket4u.Fragment;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 import static com.example.ticket4u.Utils.Constant.getUserId;
 import static com.example.ticket4u.Utils.Constant.setUsername;
 
@@ -10,14 +11,17 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +35,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.ticket4u.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +44,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -54,7 +60,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateProfileFragment extends Fragment {
-    private EditText et_register_country, et_register_Address,et_register_city,et_user_number,
+    private EditText et_register_country,et_register_adress,et_register_city,et_user_number,
         et_user_name;
     DatabaseReference myRef;
     private Dialog loadingDialog;
@@ -78,7 +84,7 @@ public class UpdateProfileFragment extends Fragment {
         imageView=view.findViewById(R.id.updateUserPic);
         et_user_number=view.findViewById(R.id.et_user_number);
         et_register_country=view.findViewById(R.id.et_register_country);
-        et_register_Address =view.findViewById(R.id.et_register_address);
+        et_register_adress=view.findViewById(R.id.et_register_address);
         et_register_city=view.findViewById(R.id.et_register_city);
         /////loading dialog
         loadingDialog=new Dialog(getContext());
@@ -110,6 +116,18 @@ public class UpdateProfileFragment extends Fragment {
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                FirebaseMessaging.getInstance().unsubscribeFromTopic(""+category)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                String msg = "Subscribed";
+                                if (!task.isSuccessful()) {
+                                    msg = "Subscribe failed";
+                                }
+                                Log.d(TAG, msg);
+                            }
+                        });
                 updateProfile();
             }
         });
@@ -155,7 +173,7 @@ public class UpdateProfileFragment extends Fragment {
                 et_user_name.setText(dataSnapshot.child("Name").getValue(String.class));
                 et_register_country.setText(dataSnapshot.child("Country").getValue(String.class));
                 et_register_city.setText(dataSnapshot.child("City").getValue(String.class));
-                et_register_Address.setText(dataSnapshot.child("Address").getValue(String.class));
+                et_register_adress.setText(dataSnapshot.child("Address").getValue(String.class));
                 et_user_number.setText(dataSnapshot.child("PhoneNumber").getValue(String.class));
 
                 Picasso.with(getContext())
@@ -195,8 +213,19 @@ public class UpdateProfileFragment extends Fragment {
                             myRef.child("Name").setValue(et_user_name.getText().toString());
                             myRef.child("Country").setValue(et_register_country.getText().toString());
                             myRef.child("City").setValue(et_register_city.getText().toString());
-                            myRef.child("Address").setValue(et_register_Address.getText().toString());
+                            myRef.child("Address").setValue(et_register_adress.getText().toString());
                             myRef.child("Category").setValue(category);
+                            FirebaseMessaging.getInstance().subscribeToTopic(""+category)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            String msg = "Subscribed";
+                                            if (!task.isSuccessful()) {
+                                                msg = "Subscribe failed";
+                                            }
+                                            Log.d(TAG, msg);
+                                        }
+                                    });
                             myRef.child("PhoneNumber").setValue(et_user_number.getText().toString());
                             myRef.child("UserImage").setValue(downloadUrl.toString());
                             loadingDialog.dismiss();
@@ -221,8 +250,19 @@ public class UpdateProfileFragment extends Fragment {
             myRef.child("Name").setValue(et_user_name.getText().toString());
             myRef.child("Country").setValue(et_register_country.getText().toString());
             myRef.child("City").setValue(et_register_city.getText().toString());
-            myRef.child("Address").setValue(et_register_Address.getText().toString());
+            myRef.child("Address").setValue(et_register_adress.getText().toString());
             myRef.child("Category").setValue(category);
+            FirebaseMessaging.getInstance().subscribeToTopic(""+category)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            String msg = "Subscribed";
+                            if (!task.isSuccessful()) {
+                                msg = "Subscribe failed";
+                            }
+                            Log.d(TAG, msg);
+                        }
+                    });
             myRef.child("PhoneNumber").setValue(et_user_number.getText().toString());
             setUsername(getContext(),et_user_name.getText().toString());
             Toast.makeText(getContext(),"profile updated", Toast.LENGTH_LONG).show();

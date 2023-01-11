@@ -1,16 +1,13 @@
 package com.example.ticket4u.Screens;
 
 import static com.example.ticket4u.Utils.Constant.getAdminLoginStatus;
-import static com.example.ticket4u.Utils.Constant.getUserLoginStatus;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.airbnb.lottie.LottieAnimationView;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.ticket4u.Admin.AdminActivity;
-import com.example.ticket4u.Admin.AdminMainActivity;
 import com.example.ticket4u.MainActivity;
 import com.example.ticket4u.R;
 

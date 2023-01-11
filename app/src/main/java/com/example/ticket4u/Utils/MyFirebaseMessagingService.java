@@ -12,10 +12,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
 
 import com.example.ticket4u.MainActivity;
 import com.example.ticket4u.R;

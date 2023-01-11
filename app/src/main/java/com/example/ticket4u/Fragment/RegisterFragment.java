@@ -9,22 +9,11 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
@@ -41,7 +30,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ticket4u.Model.Category;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+
 import com.example.ticket4u.R;
 import com.example.ticket4u.User.AccountActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -62,7 +57,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.karumi.dexter.Dexter;
@@ -73,7 +67,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 public class RegisterFragment extends Fragment  {

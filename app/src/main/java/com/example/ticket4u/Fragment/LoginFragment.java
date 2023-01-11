@@ -1,6 +1,5 @@
 package com.example.ticket4u.Fragment;
 
-import static com.example.ticket4u.Utils.Constant.getUserCity;
 import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setUserCity;
 import static com.example.ticket4u.Utils.Constant.setUserEmail;
@@ -13,11 +12,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +20,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+
 import com.example.ticket4u.Admin.AdminActivity;
-import com.example.ticket4u.Admin.AdminMainActivity;
 import com.example.ticket4u.MainActivity;
 import com.example.ticket4u.R;
 import com.example.ticket4u.User.AccountActivity;

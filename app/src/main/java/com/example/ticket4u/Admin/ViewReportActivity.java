@@ -3,9 +3,6 @@ package com.example.ticket4u.Admin;
 import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +11,10 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.ticket4u.MainActivity;
-import com.example.ticket4u.Model.Item;
 import com.example.ticket4u.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

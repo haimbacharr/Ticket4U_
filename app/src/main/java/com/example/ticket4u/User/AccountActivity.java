@@ -1,8 +1,8 @@
 package com.example.ticket4u.User;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ticket4u.Fragment.LoginFragment;
 import com.example.ticket4u.Fragment.RegisterFragment;

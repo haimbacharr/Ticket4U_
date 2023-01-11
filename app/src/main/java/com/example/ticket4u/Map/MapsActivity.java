@@ -1,8 +1,8 @@
 package com.example.ticket4u.Map;
 
-import androidx.fragment.app.FragmentActivity;
-
 import android.os.Bundle;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.ticket4u.R;
 import com.example.ticket4u.databinding.ActivityMapsBinding;

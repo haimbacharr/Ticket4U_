@@ -1,15 +1,7 @@
 package com.example.ticket4u.Admin;
 
-import static com.example.ticket4u.Utils.Constant.ShowMessageDialogWithOkBtn;
-import static com.example.ticket4u.Utils.Constant.getUserLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -26,11 +18,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ticket4u.Fragment.HomeFragment;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.ticket4u.MainActivity;
 import com.example.ticket4u.Model.Item;
 import com.example.ticket4u.R;
-import com.example.ticket4u.User.DetailActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

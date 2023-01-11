@@ -4,11 +4,6 @@ import static com.example.ticket4u.Fragment.PreferedItemFragment.myItemArrayList
 import static com.example.ticket4u.Utils.Constant.getUserId;
 import static com.example.ticket4u.Utils.Constant.getUserLoginStatus;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
@@ -21,6 +16,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.ticket4u.Map.MapsActivity;
 import com.example.ticket4u.R;

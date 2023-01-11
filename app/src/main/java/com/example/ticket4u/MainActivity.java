@@ -5,6 +5,15 @@ import static com.example.ticket4u.Utils.Constant.getUserLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -14,15 +23,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.example.ticket4u.Fragment.AboutFragment;
 import com.example.ticket4u.Fragment.HomeFragment;

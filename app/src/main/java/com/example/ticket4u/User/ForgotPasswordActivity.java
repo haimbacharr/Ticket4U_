@@ -1,8 +1,5 @@
 package com.example.ticket4u.User;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ticket4u.R;
 import com.google.android.gms.tasks.OnCompleteListener;

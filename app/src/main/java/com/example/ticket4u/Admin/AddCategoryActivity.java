@@ -3,12 +3,6 @@ package com.example.ticket4u.Admin;
 import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentResolver;
@@ -27,9 +21,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.ticket4u.MainActivity;
 import com.example.ticket4u.R;
-import com.example.ticket4u.User.AccountActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;

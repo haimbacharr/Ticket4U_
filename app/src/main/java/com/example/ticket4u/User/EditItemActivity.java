@@ -2,13 +2,6 @@ package com.example.ticket4u.User;
 
 import static com.example.ticket4u.Fragment.UserItemFragment.itemArrayList;
 import static com.example.ticket4u.Utils.Constant.INDEX;
-import static com.example.ticket4u.Utils.Constant.getUserId;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -27,6 +20,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ticket4u.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,7 +48,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
 public class EditItemActivity extends AppCompatActivity {
     private EditText et_item_name,et_item_price, et_item_quantity, et_description,et_item_asking_price,et_item_date;

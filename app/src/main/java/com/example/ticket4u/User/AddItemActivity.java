@@ -7,12 +7,6 @@ import static com.example.ticket4u.Utils.Constant.getUserCity;
 import static com.example.ticket4u.Utils.Constant.getUserId;
 import static com.example.ticket4u.Utils.Constant.getUserNumber;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -27,12 +21,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -40,7 +38,6 @@ import com.example.ticket4u.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;

@@ -1,7 +1,5 @@
 package com.example.ticket4u.Fragment;
 
-import static android.content.ContentValues.TAG;
-import static com.example.ticket4u.Fragment.SelectCategoryFragment.CATEGORY;
 import static com.example.ticket4u.Utils.Constant.getUserId;
 import static com.example.ticket4u.Utils.Constant.getUserLoginStatus;
 
@@ -10,9 +8,17 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -21,26 +27,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.Settings;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.ticket4u.Model.Category;
 import com.example.ticket4u.Model.Item;
 import com.example.ticket4u.R;
-import com.example.ticket4u.User.AddItemActivity;
 import com.example.ticket4u.User.DetailActivity;
-import com.example.ticket4u.Utils.MySingleton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,14 +43,8 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class HomeFragment extends Fragment {
 

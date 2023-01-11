@@ -78,7 +78,7 @@ import java.util.Locale;
 
 public class RegisterFragment extends Fragment  {
     private EditText etRegisterEmail,et_user_name, etRegisterPassword, etRegisterConfirmPassword
-           ,et_register_country,et_register_state=null,et_register_city=null,et_user_number;
+           ,et_register_country,et_register_address=null,et_register_city=null,et_user_number;
     private FirebaseAuth firebaseAuth;
     DatabaseReference myRef;
     TextView tv_login;
@@ -118,7 +118,7 @@ public class RegisterFragment extends Fragment  {
         imageView=view.findViewById(R.id.userPic);
         et_user_number=view.findViewById(R.id.et_user_number);
         et_register_country=view.findViewById(R.id.et_register_country);
-        et_register_state=view.findViewById(R.id.et_register_state);
+        et_register_address=view.findViewById(R.id.et_register_address);
         et_register_city=view.findViewById(R.id.et_register_city);
         /////loading dialog
         loadingDialog=new Dialog(getContext());
@@ -170,7 +170,7 @@ public class RegisterFragment extends Fragment  {
                 String confirm_password = etRegisterConfirmPassword.getText().toString();
                 String user_number =et_user_number.getText().toString();
                 String register_country =et_register_country.getText().toString(); //3 optional fields
-                String register_state = et_register_state.getText().toString();
+                String register_address = et_register_address.getText().toString();
                 String register_city = et_register_city.getText().toString();
                 if (validate(email,name, password, confirm_password,user_number)) requestRegister(email, password);
             }
@@ -305,7 +305,7 @@ public class RegisterFragment extends Fragment  {
         myRef.child("Mail").setValue(etRegisterEmail.getText().toString());
         myRef.child("Country").setValue(et_register_country.getText().toString());
         myRef.child("City").setValue(et_register_city.getText().toString());
-        myRef.child("State").setValue(et_register_state.getText().toString());
+        myRef.child("Address").setValue(et_register_address.getText().toString());
         myRef.child("Category").setValue(category);
         myRef.child("PhoneNumber").setValue(et_user_number.getText().toString());
         myRef.child("Latitude").setValue(latitude);

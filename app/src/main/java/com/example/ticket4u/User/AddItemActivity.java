@@ -113,7 +113,8 @@ public class AddItemActivity extends AppCompatActivity {
         });
     }
 
-    public void saveRecord(View view) {
+    /*
+        public void saveRecord(View view) {
         loadingDialog.show();
         try {
             String id =createFavId().substring(0,8);
@@ -182,6 +183,83 @@ public class AddItemActivity extends AppCompatActivity {
                     });
 
 
+        } catch (Exception e) {
+            loadingDialog.dismiss();
+            e.printStackTrace();
+        }
+    }
+     */
+
+    public void saveRecord(View view) {
+        loadingDialog.show();
+        try {
+            String id =createFavId().substring(0,8);
+            myRef=  FirebaseDatabase.getInstance().getReference("Items").child(id);
+            myRef.child("Name").setValue(et_item_name.getText().toString());
+            myRef.child("ItemId").setValue(id);
+            myRef.child("Category").setValue(CATEGORY);
+            myRef.child("SubCategory").setValue(SUBCATEGORY);
+            myRef.child("UserId").setValue(getUserId(AddItemActivity.this));
+            myRef.child("AskingPrice").setValue(et_item_asking_price.getText().toString());
+            myRef.child("OriginalPrice").setValue(et_item_original_price.getText().toString());
+            myRef.child("Date").setValue(et_item_date.getText().toString());
+            myRef.child("Quantity").setValue(et_item_quantity.getText().toString());
+            myRef.child("Description").setValue(et_description.getText().toString());
+            myRef.child("Sold").setValue("not");
+            myRef.child("Number").setValue(getUserNumber(AddItemActivity.this));
+            myRef.child("City").setValue(getUserCity(AddItemActivity.this));
+
+            if(imgUri == null) {
+                // Set default image URL in Realtime Database
+                String defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/ticket4u-bd3b6.appspot.com/o/profile_images%2Fdefault-image.jpg?alt=media&token=fdc5e3aa-4fa2-44ad-8940-9ed400662cff";
+                myRef.child("UserImage").setValue(defaultImageUrl);
+            }
+            else {
+                StorageReference storageReference = mRef.child(System.currentTimeMillis() + "." + getFileEx(imgUri));
+                storageReference.putFile(imgUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                                while (!urlTask.isSuccessful()) ;
+                                Uri downloadUrl = urlTask.getResult();
+                                myRef.child("ItemImage").setValue(downloadUrl.toString());
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                loadingDialog.dismiss();
+                                Toast.makeText(AddItemActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            }
+                        });
+            }
+            loadingDialog.dismiss();
+            String TOPIC = "/topics/"+CATEGORY; //topic has to match what the receiver subscribed to
+            JSONObject notification = new JSONObject();
+            JSONObject notifcationBody = new JSONObject();
+            String title = "New Ticket";
+            String message = "There is new ticket in the system from category "+CATEGORY;
+            try {
+                notifcationBody.put("title", title);
+                notifcationBody.put("message", message);
+                notification.put("to", TOPIC);
+                notification.put("priority", "high");
+                notification.put("data", notifcationBody);
+            } catch (JSONException e) {
+                Log.e(TAG, "onCreate: " + e.getMessage());
+            }
+            Notification(notification);
+
+
+            Toast.makeText(AddItemActivity.this,"item Add successful",Toast.LENGTH_LONG).show();
+            finish();
         } catch (Exception e) {
             loadingDialog.dismiss();
             e.printStackTrace();

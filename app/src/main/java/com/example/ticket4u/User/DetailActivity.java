@@ -138,7 +138,7 @@ public class DetailActivity extends AppCompatActivity {
                longitude= dataSnapshot.child("Longitude").getValue(String.class);
                 latitude= dataSnapshot.child("Latitude").getValue(String.class);
                 address=address+dataSnapshot.child("Country").getValue(String.class)+","
-                        +dataSnapshot.child("Address").getValue(String.class)+","
+                        +dataSnapshot.child("State").getValue(String.class)+","
                         +dataSnapshot.child("City").getValue(String.class);
                 et_user_address.setText(address);
                 loadingDialog.dismiss();

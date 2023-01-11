@@ -92,7 +92,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_register_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="State"
+                app:startIconDrawable="@drawable/ic_baseline_place_24"
+                tools:ignore="HardcodedText">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_register_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_register_city"
                 android:layout_width="match_parent"
@@ -138,21 +151,6 @@
 <!--                    android:layout_height="wrap_content" />-->
 
 <!--            </com.google.android.material.textfield.TextInputLayout>-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_register_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:hint="Address"
-                app:startIconDrawable="@drawable/ic_baseline_place_24"
-                tools:ignore="HardcodedText">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_register_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_register_usernumber"
                 android:layout_width="match_parent"

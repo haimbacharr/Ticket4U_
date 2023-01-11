@@ -60,7 +60,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateProfileFragment extends Fragment {
-    private EditText et_register_country,et_register_adress,et_register_city,et_user_number,
+    private EditText et_register_country,et_register_state,et_register_city,et_user_number,
         et_user_name;
     DatabaseReference myRef;
     private Dialog loadingDialog;
@@ -84,7 +84,7 @@ public class UpdateProfileFragment extends Fragment {
         imageView=view.findViewById(R.id.updateUserPic);
         et_user_number=view.findViewById(R.id.et_user_number);
         et_register_country=view.findViewById(R.id.et_register_country);
-        et_register_adress=view.findViewById(R.id.et_register_address);
+        et_register_state=view.findViewById(R.id.et_register_state);
         et_register_city=view.findViewById(R.id.et_register_city);
         /////loading dialog
         loadingDialog=new Dialog(getContext());
@@ -173,7 +173,7 @@ public class UpdateProfileFragment extends Fragment {
                 et_user_name.setText(dataSnapshot.child("Name").getValue(String.class));
                 et_register_country.setText(dataSnapshot.child("Country").getValue(String.class));
                 et_register_city.setText(dataSnapshot.child("City").getValue(String.class));
-                et_register_adress.setText(dataSnapshot.child("Address").getValue(String.class));
+                et_register_state.setText(dataSnapshot.child("State").getValue(String.class));
                 et_user_number.setText(dataSnapshot.child("PhoneNumber").getValue(String.class));
 
                 Picasso.with(getContext())
@@ -213,7 +213,7 @@ public class UpdateProfileFragment extends Fragment {
                             myRef.child("Name").setValue(et_user_name.getText().toString());
                             myRef.child("Country").setValue(et_register_country.getText().toString());
                             myRef.child("City").setValue(et_register_city.getText().toString());
-                            myRef.child("Address").setValue(et_register_adress.getText().toString());
+                            myRef.child("State").setValue(et_register_state.getText().toString());
                             myRef.child("Category").setValue(category);
                             FirebaseMessaging.getInstance().subscribeToTopic(""+category)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -250,7 +250,7 @@ public class UpdateProfileFragment extends Fragment {
             myRef.child("Name").setValue(et_user_name.getText().toString());
             myRef.child("Country").setValue(et_register_country.getText().toString());
             myRef.child("City").setValue(et_register_city.getText().toString());
-            myRef.child("Address").setValue(et_register_adress.getText().toString());
+            myRef.child("State").setValue(et_register_state.getText().toString());
             myRef.child("Category").setValue(category);
             FirebaseMessaging.getInstance().subscribeToTopic(""+category)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {

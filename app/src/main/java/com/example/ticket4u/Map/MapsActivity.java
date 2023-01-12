@@ -35,7 +35,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-          String latitude= getIntent().getStringExtra("latitude");
+        String latitude= getIntent().getStringExtra("latitude");
         String longitude= getIntent().getStringExtra("longitude");
         LatLng sydney = new LatLng(Double.valueOf(latitude),Double.valueOf( longitude));
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in location"));

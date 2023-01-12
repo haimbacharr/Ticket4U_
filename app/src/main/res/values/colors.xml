@@ -7,8 +7,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="lightpeach">#fed7cf</color>
     <color name="peach">#f29283</color>
-    <color name="lightsalmon">#ff9999</color>
     <color name="tomato">#f36859</color>
 </resources>

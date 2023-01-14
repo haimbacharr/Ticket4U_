@@ -10,8 +10,10 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,8 +55,13 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class UpdateProfileFragment extends Fragment {
     private EditText et_register_country,et_register_address,et_register_city,et_user_number,
@@ -102,11 +109,31 @@ public class UpdateProfileFragment extends Fragment {
         });
 
         loadProfile(); //read from firebase
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                addImage();
-            } //like register page, for change picture
+            public void onClick(View v) {
+                final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Add Photo!");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (options[item].equals("Take Photo")) {
+                            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            if (takePicture.resolveActivity(getActivity().getPackageManager()) != null) {
+                                startActivityForResult(takePicture, 2);
+                            }
+                        } else if (options[item].equals("Choose from Gallery")) {
+                            addImage();
+                        } else if (options[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+            }
         });
 
         btn_update=view.findViewById(R.id.btn_update);
@@ -186,13 +213,6 @@ public class UpdateProfileFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-    }
-
-    // get the extension of file
-    private String getFileEx(Uri uri){
-        ContentResolver cr=getContext().getContentResolver();
-        MimeTypeMap mime=MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cr.getType(uri));
     }
 
     public void updateProfile() {
@@ -292,6 +312,7 @@ public class UpdateProfileFragment extends Fragment {
                     }
                 }).check();
     }
+
     private void showSettingsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.dialog_permission_title));
@@ -323,8 +344,36 @@ public class UpdateProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
-            imgUri  = data.getData();
+            imgUri = data.getData();
             imageView.setImageURI(imgUri);
         }
+        if (requestCode == 2 && resultCode == RESULT_OK && null != data) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] dataBAOS = baos.toByteArray();
+
+            File imgFile = new File(getContext().getCacheDir(), UUID.randomUUID() + ".jpg");
+            try {
+                imgFile.createNewFile();
+                FileOutputStream fos = new FileOutputStream(imgFile);
+                fos.write(dataBAOS);
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            imgUri = Uri.fromFile(imgFile);
+            imageView.setImageURI(imgUri);
+        }
+    }
+
+    // get the extension of file
+    private String getFileEx(Uri uri){
+        ContentResolver cr=getContext().getContentResolver();
+        MimeTypeMap mime=MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(uri));
     }
 }

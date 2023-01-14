@@ -9,9 +9,11 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,13 +46,18 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 public class EditItemActivity extends AppCompatActivity {
-    private EditText et_item_name,et_item_price, et_item_quantity, et_description,et_item_asking_price,et_item_date;
+    private EditText et_item_name,et_item_original_price, et_item_quantity, et_description,et_item_asking_price,et_item_date;
 
     DatabaseReference myRef;
     private Dialog loadingDialog;
@@ -68,7 +75,7 @@ public class EditItemActivity extends AppCompatActivity {
         position=INDEX;
         et_item_name=findViewById(R.id.et_item_name);
         imageView=findViewById(R.id.itemPic);
-        et_item_price=findViewById(R.id.et_item_price);
+        et_item_original_price=findViewById(R.id.et_item_original_price);
         et_item_quantity=findViewById(R.id.et_item_quantity);
         et_description=findViewById(R.id.et_description);
         et_item_date=findViewById(R.id.et_item_date);
@@ -81,11 +88,11 @@ public class EditItemActivity extends AppCompatActivity {
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 
         et_item_name.setText(itemArrayList.get(position).getName());
-           et_item_price.setText(itemArrayList.get(position).getOriginalPrice());
-           et_item_asking_price.setText(itemArrayList.get(position).getAskingPrice());
+        et_item_original_price.setText(itemArrayList.get(position).getOriginalPrice());
+        et_item_asking_price.setText(itemArrayList.get(position).getAskingPrice());
         et_item_date.setText(itemArrayList.get(position).getDate());
-           et_description.setText(itemArrayList.get(position).getDescription());
-           et_item_quantity.setText(itemArrayList.get(position).getQuantity());
+        et_description.setText(itemArrayList.get(position).getDescription());
+        et_item_quantity.setText(itemArrayList.get(position).getQuantity());
         Picasso.with(this)
                 .load(itemArrayList.get(position).getPic())
                 .placeholder(R.drawable.progress_animation)
@@ -114,36 +121,34 @@ public class EditItemActivity extends AppCompatActivity {
                 datePicker.show();
             }
         });
-
-
-
     }
 
     public void updateRecord(View view) {
         loadingDialog.show();
-        if(imgUri!=null){
+
+        myRef= FirebaseDatabase.getInstance().getReference("Items").child(itemArrayList.get(position).getItemId());
+        myRef.child("Name").setValue(et_item_name.getText().toString());
+        myRef.child("AskingPrice").setValue(et_item_asking_price.getText().toString());
+        myRef.child("OriginalPrice").setValue(et_item_original_price.getText().toString());
+        myRef.child("Date").setValue(et_item_date.getText().toString());
+        myRef.child("Quantity").setValue(et_item_quantity.getText().toString());
+        myRef.child("Description").setValue(et_description.getText().toString());
+
+        if(imgUri==null) {
+            // Set default image URL in Realtime Database
+            String defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/ticket4u-bd3b6.appspot.com/o/item_images%2Fitem_default-image.jpg?alt=media&token=2061211b-7123-47de-a030-cf5bb36e264b";
+            myRef.child("ItemImage").setValue(defaultImageUrl);
+        }else{
             StorageReference storageReference = mRef.child(System.currentTimeMillis() + "." + getFileEx(imgUri));
             storageReference.putFile(imgUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                             Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                             while (!urlTask.isSuccessful()) ;
                             Uri downloadUrl = urlTask.getResult();
-                            myRef=  FirebaseDatabase.getInstance().getReference("Items").child(itemArrayList.get(position).getItemId());
-                            myRef.child("Name").setValue(et_item_name.getText().toString());
-                            myRef.child("AskingPrice").setValue(et_item_asking_price.getText().toString());
-                            myRef.child("OriginalPrice").setValue(et_item_price.getText().toString());
-                            myRef.child("Date").setValue(et_item_date.getText().toString());
-                            myRef.child("Quantity").setValue(et_item_quantity.getText().toString());
-                            myRef.child("Description").setValue(et_description.getText().toString());
                             myRef.child("ItemImage").setValue(downloadUrl.toString());
-                            loadingDialog.dismiss();
-                            Toast.makeText(EditItemActivity.this,"item updated successful",Toast.LENGTH_LONG).show();
-                            finish();
-
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -160,27 +165,34 @@ public class EditItemActivity extends AppCompatActivity {
                         }
                     });
         }
-        else {
-            myRef=  FirebaseDatabase.getInstance().getReference("Items").child(itemArrayList.get(position).getItemId());
-            myRef.child("Name").setValue(et_item_name.getText().toString());
-            myRef.child("AskingPrice").setValue(et_item_asking_price.getText().toString());
-            myRef.child("OriginalPrice").setValue(et_item_price.getText().toString());
-            myRef.child("Date").setValue(et_item_date.getText().toString());
-            myRef.child("Quantity").setValue(et_item_quantity.getText().toString());
-            myRef.child("Description").setValue(et_description.getText().toString());
-            loadingDialog.dismiss();
-            Toast.makeText(EditItemActivity.this,"item updated successful",Toast.LENGTH_LONG).show();
-            finish();
-        }
-
-
-
-
+        loadingDialog.dismiss();
+        Toast.makeText(EditItemActivity.this,"item updated successful",Toast.LENGTH_LONG).show();
+        finish();
     }
 
-    public void addPicture(View view) {
-        addImage();
-    }
+    public void addPicture(View view)
+    {
+        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditItemActivity.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (options[item].equals("Take Photo")) {
+                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePicture.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(takePicture, 2);
+                    }
+                } else if (options[item].equals("Choose from Gallery")) {
+                    addImage();
+                } else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();    }
+
     public void selectImageFromGallery(){
         Intent intent=new Intent(Intent.ACTION_PICK,android.provider. MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent,1);
@@ -195,7 +207,6 @@ public class EditItemActivity extends AppCompatActivity {
                         if (report.areAllPermissionsGranted()) {
                             selectImageFromGallery();
                         }
-
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             showSettingsDialog();
                         }
@@ -207,6 +218,7 @@ public class EditItemActivity extends AppCompatActivity {
                     }
                 }).check();
     }
+
     private void showSettingsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(EditItemActivity.this);
         builder.setTitle(getString(R.string.dialog_permission_title));
@@ -225,29 +237,50 @@ public class EditItemActivity extends AppCompatActivity {
             }
         });
         builder.show();
-//
     }
+
     private void openSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package",EditItemActivity.this.getPackageName(), null);
         intent.setData(uri);
         startActivityForResult(intent, 101);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
-            imgUri  = data.getData();
+            imgUri = data.getData();
             imageView.setImageURI(imgUri);
         }
+        if (requestCode == 2 && resultCode == RESULT_OK && null != data) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] dataBAOS = baos.toByteArray();
 
+            File imgFile = new File(getCacheDir(), UUID.randomUUID() + ".jpg");
+
+            try {
+                imgFile.createNewFile();
+                FileOutputStream fos = new FileOutputStream(imgFile);
+                fos.write(dataBAOS);
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            imgUri = Uri.fromFile(imgFile);
+            imageView.setImageURI(imgUri);
+        }
     }
+
     // get the extension of file
     private String getFileEx(Uri uri){
         ContentResolver cr=EditItemActivity.this.getContentResolver();
         MimeTypeMap mime=MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(uri));
     }
-
-
 }

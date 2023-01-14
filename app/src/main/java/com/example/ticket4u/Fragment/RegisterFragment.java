@@ -9,12 +9,14 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -65,8 +67,15 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import android.hardware.Camera;
+
 
 
 public class RegisterFragment extends Fragment  {
@@ -148,7 +157,26 @@ public class RegisterFragment extends Fragment  {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 addImage();
+                final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Add Photo!");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (options[item].equals("Take Photo")) {
+                            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            if (takePicture.resolveActivity(getActivity().getPackageManager()) != null) {
+                                startActivityForResult(takePicture, 2);
+                            }
+                        } else if (options[item].equals("Choose from Gallery")) {
+                            addImage();
+                        } else if (options[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
             }
         });
 
@@ -404,11 +432,33 @@ public class RegisterFragment extends Fragment  {
         intent.setData(uri);
         startActivityForResult(intent, 101);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
             imgUri = data.getData();
+            imageView.setImageURI(imgUri);
+        }
+        if (requestCode == 2 && resultCode == RESULT_OK && null != data) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] dataBAOS = baos.toByteArray();
+
+            File imgFile = new File(getContext().getCacheDir(), UUID.randomUUID() + ".jpg");
+            try {
+                imgFile.createNewFile();
+                FileOutputStream fos = new FileOutputStream(imgFile);
+                fos.write(dataBAOS);
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            imgUri = Uri.fromFile(imgFile);
             imageView.setImageURI(imgUri);
         }
     }

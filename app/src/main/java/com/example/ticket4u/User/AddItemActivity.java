@@ -13,9 +13,11 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -53,6 +55,10 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -113,88 +119,11 @@ public class AddItemActivity extends AppCompatActivity {
         });
     }
 
-    /*
-        public void saveRecord(View view) {
-        loadingDialog.show();
-        try {
-            String id =createFavId().substring(0,8);
-            StorageReference storageReference = mRef.child(System.currentTimeMillis() + "." + getFileEx(imgUri));
-            storageReference.putFile(imgUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                            Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                            while (!urlTask.isSuccessful()) ;
-                            Uri downloadUrl = urlTask.getResult();
-                            myRef=  FirebaseDatabase.getInstance().getReference("Items").child(id);
-                            myRef.child("Name").setValue(et_item_name.getText().toString());
-                            myRef.child("ItemId").setValue(id);
-                            myRef.child("Category").setValue(CATEGORY);
-                            myRef.child("SubCategory").setValue(SUBCATEGORY);
-                            myRef.child("UserId").setValue(getUserId(AddItemActivity.this));
-                            myRef.child("AskingPrice").setValue(et_item_asking_price.getText().toString());
-                            myRef.child("OriginalPrice").setValue(et_item_original_price.getText().toString());
-                            myRef.child("Date").setValue(et_item_date.getText().toString());
-                            myRef.child("Quantity").setValue(et_item_quantity.getText().toString());
-                            myRef.child("Description").setValue(et_description.getText().toString());
-                            myRef.child("ItemImage").setValue(downloadUrl.toString());
-                            myRef.child("Sold").setValue("not");
-                            myRef.child("Number").setValue(getUserNumber(AddItemActivity.this));
-                            myRef.child("City").setValue(getUserCity(AddItemActivity.this));
-                            loadingDialog.dismiss();
-
-
-                            String TOPIC = "/topics/"+CATEGORY; //topic has to match what the receiver subscribed to
-                            JSONObject notification = new JSONObject();
-                            JSONObject notifcationBody = new JSONObject();
-                            String title = "New Ticket";
-                            String message = "There is new ticket in the system from category "+CATEGORY;
-                            try {
-                                notifcationBody.put("title", title);
-                                notifcationBody.put("message", message);
-                                notification.put("to", TOPIC);
-                                notification.put("priority", "high");
-                                notification.put("data", notifcationBody);
-                            } catch (JSONException e) {
-                                Log.e(TAG, "onCreate: " + e.getMessage());
-                            }
-                            Notification(notification);
-
-
-                            Toast.makeText(AddItemActivity.this,"item Add successful",Toast.LENGTH_LONG).show();
-                            finish();
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            loadingDialog.dismiss();
-                            Toast.makeText(AddItemActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        }
-                    });
-
-
-        } catch (Exception e) {
-            loadingDialog.dismiss();
-            e.printStackTrace();
-        }
-    }
-     */
-
     public void saveRecord(View view) {
         loadingDialog.show();
         try {
             String id =createFavId().substring(0,8);
-            myRef=  FirebaseDatabase.getInstance().getReference("Items").child(id);
+            myRef= FirebaseDatabase.getInstance().getReference("Items").child(id);
             myRef.child("Name").setValue(et_item_name.getText().toString());
             myRef.child("ItemId").setValue(id);
             myRef.child("Category").setValue(CATEGORY);
@@ -211,8 +140,8 @@ public class AddItemActivity extends AppCompatActivity {
 
             if(imgUri == null) {
                 // Set default image URL in Realtime Database
-                String defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/ticket4u-bd3b6.appspot.com/o/profile_images%2Fdefault-image.jpg?alt=media&token=fdc5e3aa-4fa2-44ad-8940-9ed400662cff";
-                myRef.child("UserImage").setValue(defaultImageUrl);
+                String defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/ticket4u-bd3b6.appspot.com/o/item_images%2Fitem_default-image.jpg?alt=media&token=2061211b-7123-47de-a030-cf5bb36e264b";
+                myRef.child("ItemImage").setValue(defaultImageUrl);
             }
             else {
                 StorageReference storageReference = mRef.child(System.currentTimeMillis() + "." + getFileEx(imgUri));
@@ -257,7 +186,6 @@ public class AddItemActivity extends AppCompatActivity {
             }
             Notification(notification);
 
-
             Toast.makeText(AddItemActivity.this,"item Add successful",Toast.LENGTH_LONG).show();
             finish();
         } catch (Exception e) {
@@ -283,12 +211,35 @@ public class AddItemActivity extends AppCompatActivity {
         };
         Volley.newRequestQueue(this).add(jsonObjectRequest);
     }
+
     public String createFavId() throws Exception{
         return UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
     }
-    public void addPicture(View view) {
-      addImage();
+
+    public void addPicture(View view)
+    {
+        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddItemActivity.this);
+            builder.setTitle("Add Photo!");
+            builder.setItems(options, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int item) {
+                    if (options[item].equals("Take Photo")) {
+                        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (takePicture.resolveActivity(getPackageManager()) != null) {
+                            startActivityForResult(takePicture, 2);
+                        }
+                    } else if (options[item].equals("Choose from Gallery")) {
+                        addImage();
+                    } else if (options[item].equals("Cancel")) {
+                        dialog.dismiss();
+                    }
+                }
+            });
+            builder.show();
     }
+
     public void selectImageFromGallery(){
         Intent intent=new Intent(Intent.ACTION_PICK,android.provider. MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent,1);
@@ -303,7 +254,6 @@ public class AddItemActivity extends AppCompatActivity {
                         if (report.areAllPermissionsGranted()) {
                             selectImageFromGallery();
                         }
-
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             showSettingsDialog();
                         }
@@ -315,6 +265,7 @@ public class AddItemActivity extends AppCompatActivity {
                     }
                 }).check();
     }
+
     private void showSettingsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(AddItemActivity.this);
         builder.setTitle(getString(R.string.dialog_permission_title));
@@ -333,27 +284,51 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
         builder.show();
-//
     }
+
     private void openSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package",AddItemActivity.this.getPackageName(), null);
         intent.setData(uri);
         startActivityForResult(intent, 101);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
-            imgUri  = data.getData();
+            imgUri = data.getData();
             imageView.setImageURI(imgUri);
         }
+        if (requestCode == 2 && resultCode == RESULT_OK && null != data) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] dataBAOS = baos.toByteArray();
 
+            File imgFile = new File(getCacheDir(), UUID.randomUUID() + ".jpg");
+
+            try {
+                imgFile.createNewFile();
+                FileOutputStream fos = new FileOutputStream(imgFile);
+                fos.write(dataBAOS);
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            imgUri = Uri.fromFile(imgFile);
+            imageView.setImageURI(imgUri);
+        }
     }
-    // get the extension of file
-    private String getFileEx(Uri uri){
-        ContentResolver cr=AddItemActivity.this.getContentResolver();
-        MimeTypeMap mime=MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cr.getType(uri));
-    }
+
+        // get the extension of file
+        private String getFileEx(Uri uri){
+            ContentResolver cr=AddItemActivity.this.getContentResolver();
+            MimeTypeMap mime=MimeTypeMap.getSingleton();
+            return mime.getExtensionFromMimeType(cr.getType(uri));
+        }
 }

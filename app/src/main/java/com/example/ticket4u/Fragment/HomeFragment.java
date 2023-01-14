@@ -77,6 +77,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         listrecylerView=view.findViewById(R.id.listrecylerView);
         listrecylerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        getActivity().setTitle("Ticket4u -> Home Page");
 
         search.addTextChangedListener(new TextWatcher() {
             @Override

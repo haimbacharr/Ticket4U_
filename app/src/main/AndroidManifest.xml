@@ -128,6 +128,7 @@
         </activity>
         <activity
             android:name=".User.ForgotPasswordActivity"
+            android:label="Forget Password"
             android:exported="false"/>
         <activity
             android:name=".User.AccountActivity"

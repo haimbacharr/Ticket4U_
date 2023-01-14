@@ -126,6 +126,7 @@ public class RegisterFragment extends Fragment  {
         et_user_name = view.findViewById(R.id.et_user_name);
         tv_login=view.findViewById(R.id.tv_login);
         spinner =view.findViewById(R.id.spinner);
+        getActivity().setTitle("Sign Up Page");
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { //set the spinner for select interested category
             @Override
@@ -419,4 +420,6 @@ public class RegisterFragment extends Fragment  {
         MimeTypeMap mime=MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(uri));
     }
+
+
 }

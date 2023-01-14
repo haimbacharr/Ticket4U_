@@ -100,7 +100,6 @@ public class HomeFragment extends Fragment {
                 for(Item item: itemArrayList1){
                     if(item.getName().toLowerCase().contains(text.toLowerCase())||item.getCategory().toLowerCase().contains(text.toLowerCase())
                             ||item.getCity().toLowerCase().contains(text.toLowerCase())||
-                    item.getPic().toLowerCase().contains(text.toLowerCase())||
                     item.getQuantity().toLowerCase().contains(text.toLowerCase())){
                         filterlist.add(item);
                     }

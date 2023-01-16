@@ -1,5 +1,8 @@
 package com.example.ticket4u.Admin;
 
+import static com.example.ticket4u.Utils.Constant.getKilometers;
+import static com.example.ticket4u.Utils.Constant.getUserLatitude;
+import static com.example.ticket4u.Utils.Constant.getUserLongitude;
 import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
 
@@ -72,6 +75,17 @@ public class AdminMainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) { //dataSnapshot represents data at a specific location in the database.
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                    Double distance = 0.0;
+                    try {
+                        String latt = dataSnapshot1.child("latitude").getValue(String.class);
+                        String longt = dataSnapshot1.child("longitude").getValue(String.class);
+                        distance = getKilometers(Double.parseDouble(latt),Double.parseDouble(longt),
+                                Double.parseDouble(getUserLatitude(AdminMainActivity.this))
+                                ,Double.parseDouble(getUserLongitude(AdminMainActivity.this)));
+                    }catch (NumberFormatException e){
+                    }catch (NullPointerException e){
+                    }catch (Exception e){
+                    }
                     itemArrayList.add(new Item(
                             dataSnapshot1.child("Name").getValue(String.class)
                             ,dataSnapshot1.child("ItemImage").getValue(String.class)
@@ -84,6 +98,9 @@ public class AdminMainActivity extends AppCompatActivity {
                             dataSnapshot1.child("ItemId").getValue(String.class)
                             , dataSnapshot1.child("AskingPrice").getValue(String.class)
                             ,dataSnapshot1.child("Date").getValue(String.class)
+                            ,dataSnapshot1.child("latitude").getValue(String.class)
+                            ,dataSnapshot1.child("longitude").getValue(String.class)
+                            ,""+distance
                     ));
                 }
                 categoryAdapter=new CategoryAdapter();

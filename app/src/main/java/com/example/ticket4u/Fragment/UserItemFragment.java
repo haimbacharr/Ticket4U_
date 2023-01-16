@@ -1,6 +1,9 @@
 package com.example.ticket4u.Fragment;
 
 import static com.example.ticket4u.Utils.Constant.INDEX;
+import static com.example.ticket4u.Utils.Constant.getKilometers;
+import static com.example.ticket4u.Utils.Constant.getUserLatitude;
+import static com.example.ticket4u.Utils.Constant.getUserLongitude;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -20,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ticket4u.Admin.AdminMainActivity;
 import com.example.ticket4u.Model.Item;
 import com.example.ticket4u.R;
 import com.example.ticket4u.User.EditItemActivity;
@@ -72,6 +76,17 @@ public class UserItemFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
                     if(Constant.getUserId(getContext()).equals(dataSnapshot1.child("UserId").getValue(String.class))) {
+                        Double distance = 0.0;
+                        try {
+                            String latt = dataSnapshot1.child("latitude").getValue(String.class);
+                            String longt = dataSnapshot1.child("longitude").getValue(String.class);
+                            distance = getKilometers(Double.parseDouble(latt),Double.parseDouble(longt),
+                                    Double.parseDouble(getUserLatitude(getContext()))
+                                    ,Double.parseDouble(getUserLongitude(getContext())));
+                        }catch (NumberFormatException e){
+                        }catch (NullPointerException e){
+                        }catch (Exception e){
+                        }
                         if (dataSnapshot1.child("Sold").getValue(String.class).equals("not")) {
                             itemArrayList.add(new Item(
                                     dataSnapshot1.child("Name").getValue(String.class)
@@ -85,6 +100,9 @@ public class UserItemFragment extends Fragment {
                                       dataSnapshot1.child("ItemId").getValue(String.class)
                                     , dataSnapshot1.child("AskingPrice").getValue(String.class)
                                     , dataSnapshot1.child("Date").getValue(String.class)
+                                    ,dataSnapshot1.child("latitude").getValue(String.class)
+                                    ,dataSnapshot1.child("longitude").getValue(String.class),
+                                    ""+distance
                             ));
                         }
                     }
@@ -168,7 +186,8 @@ public class UserItemFragment extends Fragment {
                     builder.show();
                 }
             });
-
+            holder.distance.setVisibility(View.VISIBLE);
+            holder.distance.setText("" + itemArrayList.get(position).getDistance()+" KM");
 
 
 
@@ -180,7 +199,7 @@ public class UserItemFragment extends Fragment {
         }
 
         public class ImageViewHoler extends RecyclerView.ViewHolder {
-            TextView name,price,quantity;
+            TextView name,price,quantity,distance;
             ImageView cat_image,fav_icon;
             CardView cardView;
             public ImageViewHoler(@NonNull View itemView) {
@@ -191,6 +210,7 @@ public class UserItemFragment extends Fragment {
                 fav_icon=itemView.findViewById(R.id.fav_icon);
                 cat_image=itemView.findViewById(R.id.imageView);
                 cardView=itemView.findViewById(R.id.card);
+                distance=itemView.findViewById(R.id.distance);
             }
         }
     }

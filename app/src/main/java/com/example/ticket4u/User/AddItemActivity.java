@@ -5,6 +5,8 @@ import static com.example.ticket4u.Fragment.SelectCategoryFragment.CATEGORY;
 import static com.example.ticket4u.Fragment.SelectCategoryFragment.SUBCATEGORY;
 import static com.example.ticket4u.Utils.Constant.getUserCity;
 import static com.example.ticket4u.Utils.Constant.getUserId;
+import static com.example.ticket4u.Utils.Constant.getUserLatitude;
+import static com.example.ticket4u.Utils.Constant.getUserLongitude;
 import static com.example.ticket4u.Utils.Constant.getUserNumber;
 
 import android.Manifest;
@@ -137,6 +139,8 @@ public class AddItemActivity extends AppCompatActivity {
             myRef.child("Sold").setValue("not");
             myRef.child("Number").setValue(getUserNumber(AddItemActivity.this));
             myRef.child("City").setValue(getUserCity(AddItemActivity.this));
+            myRef.child("latitude").setValue(getUserLatitude(AddItemActivity.this));
+            myRef.child("longitude").setValue(getUserLongitude(AddItemActivity.this));
 
             if(imgUri == null) {
                 // Set default image URL in Realtime Database

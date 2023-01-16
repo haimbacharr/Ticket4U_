@@ -1,8 +1,14 @@
 package com.example.ticket4u.User;
 
+import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
+import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
+
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,6 +21,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ticket4u.Admin.AdminMainActivity;
+import com.example.ticket4u.MainActivity;
 import com.example.ticket4u.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -85,5 +93,27 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             });
                 }}
         });
+    }
+
+    /* create a menu in the top right corner of the activity */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    /* The functionality of the menu */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.logout:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

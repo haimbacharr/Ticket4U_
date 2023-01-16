@@ -3,6 +3,10 @@ package com.example.ticket4u.Fragment;
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 
+import static com.example.ticket4u.Utils.Constant.setUserInterest;
+import static com.example.ticket4u.Utils.Constant.setUserLatitude;
+import static com.example.ticket4u.Utils.Constant.setUserLongitude;
+
 import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentResolver;
@@ -18,6 +22,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,6 +140,7 @@ public class RegisterFragment extends Fragment  {
         et_user_name = view.findViewById(R.id.et_user_name);
         tv_login=view.findViewById(R.id.tv_login);
         spinner =view.findViewById(R.id.spinner);
+        getActivity().setTitle("Sign Up Page");
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { //set the spinner for select interested category
             @Override
@@ -185,15 +191,25 @@ public class RegisterFragment extends Fragment  {
             @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
             @Override
             public void onClick(View view) {
-                String email = etRegisterEmail.getText().toString();
-                String name = et_user_name.getText().toString();
-                String password = etRegisterPassword.getText().toString();
-                String confirm_password = etRegisterConfirmPassword.getText().toString();
-                String user_number =et_user_number.getText().toString();
-                String register_country =et_register_country.getText().toString(); //3 optional fields
-                String register_address = et_register_address.getText().toString();
-                String register_city = et_register_city.getText().toString();
-                if (validate(email,name, password, confirm_password,user_number)) requestRegister(email, password);
+                getLastLocation();
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) { // if gps off
+                    OnGPS();
+                }else if (TextUtils.isEmpty(latitude) || TextUtils.isEmpty(longitude)) {
+                    Toast.makeText(getContext(),"Please enable gps to register your account",Toast.LENGTH_LONG).show();
+                }else if (latitude.equalsIgnoreCase("0.0") || longitude.equalsIgnoreCase("0.0")) {
+                    Toast.makeText(getContext(),"Please enable gps to register your account",Toast.LENGTH_LONG).show();
+                }else {
+                    String email = etRegisterEmail.getText().toString();
+                    String name = et_user_name.getText().toString();
+                    String password = etRegisterPassword.getText().toString();
+                    String confirm_password = etRegisterConfirmPassword.getText().toString();
+                    String user_number = et_user_number.getText().toString();
+                    String register_country = et_register_country.getText().toString(); //3 optional fields
+                    String register_address = et_register_address.getText().toString();
+                    String register_city = et_register_city.getText().toString();
+                    if (validate(email, name, password, confirm_password, user_number))
+                        requestRegister(email, password);
+                }
             }
         });
 
@@ -331,6 +347,9 @@ public class RegisterFragment extends Fragment  {
         myRef.child("PhoneNumber").setValue(et_user_number.getText().toString());
         myRef.child("Latitude").setValue(latitude);
         myRef.child("Longitude").setValue(longitude);
+        setUserInterest(getActivity(),category);
+        setUserLatitude(getActivity(),latitude);
+        setUserLongitude(getActivity(),longitude);
 
         FirebaseMessaging.getInstance().subscribeToTopic(""+category)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {

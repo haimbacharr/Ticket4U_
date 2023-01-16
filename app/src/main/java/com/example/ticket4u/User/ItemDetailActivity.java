@@ -5,7 +5,9 @@ import static com.example.ticket4u.Utils.Constant.getUserId;
 import static com.example.ticket4u.Utils.Constant.getUserLoginStatus;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -163,7 +165,6 @@ public class ItemDetailActivity extends AppCompatActivity {
 
     }
 
-
     public void addToFav(){
         String itemId=myItemArrayList.get(index).getItemId();
         DatabaseReference  myRef=  FirebaseDatabase.getInstance().getReference().child("Favourite").child(getUserId(ItemDetailActivity.this)).child(itemId);
@@ -179,6 +180,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         dial="tel:" +myItemArrayList.get(index).getNumber();
         makePhoneCall();
     }
+
     private void makePhoneCall(){
         if(ContextCompat.checkSelfPermission(ItemDetailActivity.this,
                 android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
@@ -186,9 +188,11 @@ public class ItemDetailActivity extends AppCompatActivity {
                     new String[]{  android.Manifest.permission.CALL_PHONE},1);
         }
         else {
-            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+            showAlert();
+            //startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
         }
     }
+
     @SuppressLint("MissingSuperCall")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -197,5 +201,23 @@ public class ItemDetailActivity extends AppCompatActivity {
                 makePhoneCall();
             }
         }
+    }
+
+    public void showAlert(){
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setTitle("Call Alert");
+        adb.setMessage("Do you want to make call "+et_user_name.getText().toString()+" ?");
+        adb.setIcon(android.R.drawable.ic_dialog_alert);
+        adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+            }
+        });
+        adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        adb.show();
     }
 }

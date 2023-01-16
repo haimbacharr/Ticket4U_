@@ -1,5 +1,8 @@
 package com.example.ticket4u.Admin;
 
+import static com.example.ticket4u.Utils.Constant.getKilometers;
+import static com.example.ticket4u.Utils.Constant.getUserLatitude;
+import static com.example.ticket4u.Utils.Constant.getUserLongitude;
 import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
 
@@ -81,7 +84,19 @@ public class ReportActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             String report=  dataSnapshot.child("itemReport").getValue(String.class);
+                            Double distance = 0.0;
+                            try {
+                                String latt = dataSnapshot1.child("latitude").getValue(String.class);
+                                String longt = dataSnapshot1.child("longitude").getValue(String.class);
+                                distance = getKilometers(Double.parseDouble(latt),Double.parseDouble(longt),
+                                        Double.parseDouble(getUserLatitude(ReportActivity.this))
+                                        ,Double.parseDouble(getUserLongitude(ReportActivity.this)));
+                            }catch (NumberFormatException e){
+                            }catch (NullPointerException e){
+                            }catch (Exception e){
+                            }
                             if(report!=null){
+
                                 itemArrayList.add(new Item(
                                         dataSnapshot1.child("Name").getValue(String.class)
                                         ,dataSnapshot1.child("ItemImage").getValue(String.class)
@@ -94,6 +109,9 @@ public class ReportActivity extends AppCompatActivity {
                                         ,dataSnapshot1.child("ItemId").getValue(String.class)
                                         ,dataSnapshot1.child("AskingPrice").getValue(String.class)
                                         ,dataSnapshot1.child("Date").getValue(String.class)
+                                        ,dataSnapshot1.child("latitude").getValue(String.class)
+                                        ,dataSnapshot1.child("longitude").getValue(String.class)
+                                        ,""+distance
                                 ));
 
                                 categoryAdapter.notifyDataSetChanged(); /* The notifyDataSetChanged method is used

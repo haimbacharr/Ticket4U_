@@ -115,8 +115,6 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     @Override
@@ -148,7 +146,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void openMap(View view) {
-
          startActivity(new Intent(this, MapsActivity.class)
                  .putExtra("latitude",latitude)
                  .putExtra("longitude",longitude));
@@ -181,6 +178,7 @@ public class DetailActivity extends AppCompatActivity {
         dial="tel:" +itemArrayList.get(index).getNumber();
         makePhoneCall();
     }
+
     private void makePhoneCall(){
         if(ContextCompat.checkSelfPermission(DetailActivity.this,
                 android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
@@ -188,13 +186,10 @@ public class DetailActivity extends AppCompatActivity {
                     new String[]{  android.Manifest.permission.CALL_PHONE},1);
         }
         else {
-
-
-
-
           showAlert();
         }
     }
+
     @SuppressLint("MissingSuperCall")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -204,7 +199,6 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
     }
-
 
     public void showAlert(){
         AlertDialog.Builder adb = new AlertDialog.Builder(this);

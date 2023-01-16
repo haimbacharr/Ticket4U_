@@ -100,6 +100,7 @@ public class HomeFragment extends Fragment  {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         listrecylerView = view.findViewById(R.id.listrecylerView);
         listrecylerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        getActivity().setTitle("Ticket4u -> Home Page");
 
         imfilter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,8 +170,8 @@ public class HomeFragment extends Fragment  {
             private void filter(String text) {
                 ArrayList<Item> filterlist = new ArrayList<>();
                 for (Item item : itemArrayList1) {
-                    if (item.getName().toLowerCase().contains(text.toLowerCase())
-                           ) {
+                    if (item.getName().toLowerCase().contains(text.toLowerCase()))
+                    {
                         filterlist.add(item);
                     }
                 }

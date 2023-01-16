@@ -60,6 +60,7 @@ public class LoginFragment extends Fragment {
         etLoginPassword = view.findViewById(R.id.et_login_password);
         tv_new_register=view.findViewById(R.id.tv_new_register);
         Button btnLogin = view.findViewById(R.id.btn_login);
+        getActivity().setTitle("Login Page");
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)

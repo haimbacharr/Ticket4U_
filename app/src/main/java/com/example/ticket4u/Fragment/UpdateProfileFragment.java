@@ -3,6 +3,8 @@ package com.example.ticket4u.Fragment;
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 import static com.example.ticket4u.Utils.Constant.getUserId;
+import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
+import static com.example.ticket4u.Utils.Constant.setUserInterest;
 import static com.example.ticket4u.Utils.Constant.setUsername;
 
 import android.Manifest;
@@ -31,6 +33,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.ticket4u.Admin.AddCategoryActivity;
 import com.example.ticket4u.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -212,6 +215,8 @@ public class UpdateProfileFragment extends Fragment {
                             myRef.child("City").setValue(et_register_city.getText().toString());
                             myRef.child("Address").setValue(et_register_address.getText().toString());
                             myRef.child("Category").setValue(category);
+                            setUserInterest(getActivity(),category);
+
                             FirebaseMessaging.getInstance().subscribeToTopic(""+category)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -249,6 +254,8 @@ public class UpdateProfileFragment extends Fragment {
             myRef.child("City").setValue(et_register_city.getText().toString());
             myRef.child("Address").setValue(et_register_address.getText().toString());
             myRef.child("Category").setValue(category);
+            setUserInterest(getActivity(),category);
+
             FirebaseMessaging.getInstance().subscribeToTopic(""+category)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

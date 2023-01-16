@@ -1,12 +1,6 @@
 package com.example.ticket4u.Fragment;
 
-import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
-import static com.example.ticket4u.Utils.Constant.setUserCity;
-import static com.example.ticket4u.Utils.Constant.setUserEmail;
-import static com.example.ticket4u.Utils.Constant.setUserId;
-import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
-import static com.example.ticket4u.Utils.Constant.setUserNumber;
-import static com.example.ticket4u.Utils.Constant.setUsername;
+import static com.example.ticket4u.Utils.Constant.*;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -66,7 +60,6 @@ public class LoginFragment extends Fragment {
         etLoginPassword = view.findViewById(R.id.et_login_password);
         tv_new_register=view.findViewById(R.id.tv_new_register);
         Button btnLogin = view.findViewById(R.id.btn_login);
-        getActivity().setTitle("Login Page");
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
@@ -156,6 +149,9 @@ public class LoginFragment extends Fragment {
                         setUserCity(getContext(),dataSnapshot1.child("City").getValue(String.class));
                         setUserLoginStatus(getContext(), true); //turn on the login status
                         setUserEmail(getContext(),etLoginEmail.getText().toString().trim());
+                        setUserInterest(getContext(),dataSnapshot1.child("Category").getValue(String.class));
+                        setUserLatitude(getContext(),dataSnapshot1.child("Latitude").getValue(String.class));
+                        setUserLongitude(getContext(),dataSnapshot1.child("Longitude").getValue(String.class));
                         loadingDialog.dismiss();
                         openHomeActivity(); //go to home screen (user)
                     }

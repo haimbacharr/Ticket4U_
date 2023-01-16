@@ -1,6 +1,9 @@
 package com.example.ticket4u.Fragment;
 
+import static com.example.ticket4u.Utils.Constant.getKilometers;
 import static com.example.ticket4u.Utils.Constant.getUserId;
+import static com.example.ticket4u.Utils.Constant.getUserLatitude;
+import static com.example.ticket4u.Utils.Constant.getUserLongitude;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -18,9 +21,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ticket4u.Admin.AdminMainActivity;
 import com.example.ticket4u.Model.Item;
+import com.example.ticket4u.User.DetailActivity;
 import com.example.ticket4u.R;
-import com.example.ticket4u.User.ItemDetailActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -87,6 +91,17 @@ public class PreferedItemFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                    Double distance = 0.0;
+                    try {
+                        String latt = dataSnapshot1.child("latitude").getValue(String.class);
+                        String longt = dataSnapshot1.child("longitude").getValue(String.class);
+                        distance = getKilometers(Double.parseDouble(latt),Double.parseDouble(longt),
+                                Double.parseDouble(getUserLatitude(getContext()))
+                                ,Double.parseDouble(getUserLongitude(getContext())));
+                    }catch (NumberFormatException e){
+                    }catch (NullPointerException e){
+                    }catch (Exception e){
+                    }
                     if(favouriteItemList.contains(dataSnapshot1.child("ItemId").getValue(String.class))){
                         myItemArrayList.add(new Item(
                                 dataSnapshot1.child("Name").getValue(String.class)
@@ -100,6 +115,10 @@ public class PreferedItemFragment extends Fragment {
                                 dataSnapshot1.child("ItemId").getValue(String.class)
                                 , dataSnapshot1.child("AskingPrice").getValue(String.class)
                                 ,dataSnapshot1.child("Date").getValue(String.class)
+                                ,dataSnapshot1.child("latitude").getValue(String.class)
+                                ,dataSnapshot1.child("longitude").getValue(String.class)
+                                ,""+distance
+
                         ));
                     }
 
@@ -152,12 +171,14 @@ public class PreferedItemFragment extends Fragment {
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                              startActivity(new Intent(getContext(), ItemDetailActivity.class)
+                              startActivity(new Intent(getContext(), DetailActivity.class)
                               .putExtra("index",position)
                                       .putExtra("status",true));
                 }
             });
 
+            holder.distance.setVisibility(View.VISIBLE);
+            holder.distance.setText("" + myItemArrayList.get(position).getDistance()+" KM");
 
 
 
@@ -170,7 +191,7 @@ public class PreferedItemFragment extends Fragment {
         }
 
         public class ImageViewHoler extends RecyclerView.ViewHolder {
-            TextView name,price,quantity;
+            TextView name,price,quantity,distance;
             ImageView cat_image,fav_icon;
             CardView cardView;
             public ImageViewHoler(@NonNull View itemView) {
@@ -179,6 +200,7 @@ public class PreferedItemFragment extends Fragment {
                 price=itemView.findViewById(R.id.price);
                 quantity=itemView.findViewById(R.id.quantity);
                 fav_icon=itemView.findViewById(R.id.fav_icon);
+                distance=itemView.findViewById(R.id.distance);
                 cat_image=itemView.findViewById(R.id.imageView);
                 cardView=itemView.findViewById(R.id.card);
             }

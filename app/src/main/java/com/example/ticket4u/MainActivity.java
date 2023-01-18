@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
             item1.setVisible(false);
             hideOptionForLoginUser();
 
-
         }
         askNotificationPermission();
 
@@ -255,5 +254,4 @@ public class MainActivity extends AppCompatActivity {
         MenuItem _register = menu.findItem(R.id._logout_user);
         _register.setVisible(false);
     }
-
 }

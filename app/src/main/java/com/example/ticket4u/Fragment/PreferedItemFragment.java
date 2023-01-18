@@ -33,7 +33,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-
 public class PreferedItemFragment extends Fragment {
 
    static public ArrayList<Item> myItemArrayList =new ArrayList<Item>();
@@ -149,12 +148,7 @@ public class PreferedItemFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull final CategoryAdapter.ImageViewHoler holder, @SuppressLint("RecyclerView") int position) {
 
-
             holder.fav_icon.setVisibility(View.GONE);
-
-
-
-
 
             Picasso.with(getContext())
                     .load(myItemArrayList.get(position).getPic())
@@ -162,7 +156,6 @@ public class PreferedItemFragment extends Fragment {
                     .fit()
                     .centerCrop()
                     .into(holder.cat_image);
-
 
             holder.name.setText(myItemArrayList.get(position).getName());
             holder.price.setText("Price "+myItemArrayList.get(position).getOriginalPrice()+" $");
@@ -178,9 +171,6 @@ public class PreferedItemFragment extends Fragment {
 
             holder.distance.setVisibility(View.VISIBLE);
             holder.distance.setText("" + myItemArrayList.get(position).getDistance()+" KM");
-
-
-
 
         }
 
@@ -205,5 +195,4 @@ public class PreferedItemFragment extends Fragment {
             }
         }
     }
-
 }

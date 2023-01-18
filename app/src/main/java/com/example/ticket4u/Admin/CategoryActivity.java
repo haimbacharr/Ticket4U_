@@ -1,6 +1,5 @@
 package com.example.ticket4u.Admin;
 
-
 import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
 
@@ -43,7 +42,6 @@ public class CategoryActivity extends AppCompatActivity {
 
     DatabaseReference myRef; //used as instance to get data from the firebase.
     private Dialog loadingDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +117,6 @@ public class CategoryActivity extends AppCompatActivity {
             View v= LayoutInflater.from(CategoryActivity.this).inflate(R.layout.item_main_category,parent,false);
             return  new ImageViewHoler(v);
         }
-
 
         /* onBindViewHolder(): called to display the data at the specified position.
         This method sets the data for the item at the given position.

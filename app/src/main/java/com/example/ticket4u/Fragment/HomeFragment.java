@@ -70,7 +70,6 @@ public class HomeFragment extends Fragment  {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         search = view.findViewById(R.id.search);
 
-
         //loading dialog
         loadingDialog = new Dialog(getContext());
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -253,8 +252,6 @@ public class HomeFragment extends Fragment  {
         });
     }
 
-
-
     public void getSpecificData(String name) {
         loadingDialog.show();
         itemArrayList1.clear();
@@ -354,8 +351,6 @@ public class HomeFragment extends Fragment  {
         myRef.removeValue();
     }
 
-
-
     public class ArrayAdapter extends RecyclerView.Adapter<ArrayAdapter.ImageViewHoler> {
 
         public ArrayAdapter() {
@@ -440,7 +435,6 @@ public class HomeFragment extends Fragment  {
                 holder.fav_icon.setVisibility(View.GONE);
             }
 
-
             if (itemArrayList.get(position).getCategory().equals(getUserInterest(getContext()))) {
                 holder.rlback.setBackgroundResource(R.drawable.list_back_blue);
             } else {
@@ -520,5 +514,4 @@ public class HomeFragment extends Fragment  {
             }
         }
     }
-
 }

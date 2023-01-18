@@ -100,5 +100,4 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         notificationManager.notify(notificationID /* ID of notification */, notificationBuilder.build());
     }
-
 }

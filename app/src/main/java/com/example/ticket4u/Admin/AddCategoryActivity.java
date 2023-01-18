@@ -40,7 +40,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-
 /* This activity control the adding of new categories */
 public class AddCategoryActivity extends AppCompatActivity {
     EditText et_catrgory; //edit text for getting the name of the new category.
@@ -146,7 +145,6 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     }
 
-
     /* This method is used to select an image from the device external storage */
     public void selectImageFromGallery(){
         Intent intent=new Intent(Intent.ACTION_PICK,android.provider. MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -164,28 +162,6 @@ public class AddCategoryActivity extends AppCompatActivity {
             selectImageFromGallery();
         }
     }
-
-    /* This code is creating an AlertDialog that shows a message to the user and provides two options: go to settings or cancel. */
-    private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(AddCategoryActivity.this);
-        builder.setTitle(getString(R.string.dialog_permission_title));
-        builder.setMessage(getString(R.string.dialog_permission_message));
-        builder.setPositiveButton(getString(R.string.go_to_settings), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                openSettings();
-            }
-        });
-        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
-    }
-
 
     /* This method will open the settings for the app when called.
      It does this by creating an Intent with the action Settings.ACTION_APPLICATION_DETAILS_SETTINGS.

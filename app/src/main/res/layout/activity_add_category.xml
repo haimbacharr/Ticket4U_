@@ -38,10 +38,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
-
-
-
             <Button
                 android:layout_margin="10dp"
                 android:onClick="saveCategoryRecord"
@@ -52,8 +48,6 @@
                 android:background="@drawable/border_radious"
                 app:backgroundTint="@color/peach"
                 tools:ignore="HardcodedText" />
-
-
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

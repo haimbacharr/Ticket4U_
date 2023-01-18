@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment.RegisterFragment">
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -70,14 +69,12 @@
                 android:layout_margin="10dp"
                 android:textSize="20sp"
                 android:textColor="@color/peach"
-                android:text="Select Interested Category"
-                />
+                android:text="Select Interested Category" />
        <Spinner
     android:layout_width="match_parent"
     android:layout_margin="10dp"
     android:id="@+id/spinner"
-    android:layout_height="50dp"
-      />
+    android:layout_height="50dp" />
              <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_register_country"
                 android:layout_width="match_parent"
@@ -170,13 +167,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
-
-
-
-
-
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_register_password"
                 android:layout_width="match_parent"
@@ -213,7 +203,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <Button
                 android:id="@+id/btn_register"
                 android:layout_width="match_parent"
@@ -232,7 +221,6 @@
                 android:layout_marginBottom="40dp"
                 android:text="Already have an account? Login"
                 android:textSize="16sp" />
-
         </LinearLayout>
     </ScrollView>
 

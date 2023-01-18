@@ -147,7 +147,6 @@ public class AdminMainActivity extends AppCompatActivity {
             holder.price.setText("Price: "+itemArrayList.get(position).getOriginalPrice()+"$"); // display the price of the item.
             holder.quantity.setText("Quantity: "+itemArrayList.get(position).getQuantity()); // display the quantity of the item.
 
-
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

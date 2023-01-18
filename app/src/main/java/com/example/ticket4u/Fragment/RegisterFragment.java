@@ -7,6 +7,7 @@ import static com.example.ticket4u.Utils.Constant.setUserLatitude;
 import static com.example.ticket4u.Utils.Constant.setUserLongitude;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -73,8 +74,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
-
-
 
 public class RegisterFragment extends Fragment  {
     private EditText etRegisterEmail,et_user_name, etRegisterPassword, etRegisterConfirmPassword
@@ -210,6 +209,7 @@ public class RegisterFragment extends Fragment  {
         return view;
     }
 
+    @SuppressLint("MissingPermission")
     private void getLastLocation() { //get the location and update the latitude and longitude of user.
         mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
@@ -226,6 +226,7 @@ public class RegisterFragment extends Fragment  {
         });
     }
 
+    @SuppressLint("MissingPermission")
     private void requestNewLocationData() {
         // Initializing LocationRequest
         // object with appropriate methods
@@ -267,7 +268,6 @@ public class RegisterFragment extends Fragment  {
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-
 
     public void getData(){
         loadingDialog.show();
@@ -356,7 +356,6 @@ public class RegisterFragment extends Fragment  {
                     }
                 });
 
-
         if(imgUri == null) {
             // Set default image URL in Realtime Database
             String defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/ticket4u-bd3b6.appspot.com/o/profile_images%2Fdefault-image.jpg?alt=media&token=fdc5e3aa-4fa2-44ad-8940-9ed400662cff";
@@ -404,26 +403,6 @@ public class RegisterFragment extends Fragment  {
         }else{
             selectImageFromGallery();
         }
-    }
-
-    private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.dialog_permission_title));
-        builder.setMessage(getString(R.string.dialog_permission_message));
-        builder.setPositiveButton(getString(R.string.go_to_settings), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                openSettings();
-            }
-        });
-        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
     }
 
     private void openSettings() {

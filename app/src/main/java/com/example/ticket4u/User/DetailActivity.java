@@ -77,7 +77,6 @@ public class DetailActivity extends AppCompatActivity {
                 .centerCrop()
                 .into(imageView);
 
-
         et_item_name.setText(itemArrayList.get(index).getName());
         et_item_price.setText(itemArrayList.get(index).getOriginalPrice());
         et_item_quantity.setText(itemArrayList.get(index).getQuantity());
@@ -161,7 +160,6 @@ public class DetailActivity extends AppCompatActivity {
           }
 
     }
-
 
     public void addToFav(){
         String itemId=itemArrayList.get(index).getItemId();

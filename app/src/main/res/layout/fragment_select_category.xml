@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment.SelectCategoryFragment">
 
-
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="150dp"
@@ -44,7 +43,6 @@
         android:layout_height="50dp"
         android:text="next"
         android:background="@drawable/border_radious"
-        android:onClick="addItem"
         android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

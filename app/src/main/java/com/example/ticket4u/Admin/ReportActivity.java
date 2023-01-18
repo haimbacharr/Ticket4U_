@@ -67,7 +67,6 @@ public class ReportActivity extends AppCompatActivity {
         loadingDialog.show();// The loadingDialog is displayed while the data is being fetched.
         itemArrayList.clear();
 
-
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Items"); /* reference to a specific location in the
         Firebase Realtime Database, In this case, it points to the "Items" child node. */
 
@@ -149,7 +148,6 @@ public class ReportActivity extends AppCompatActivity {
             return  new CategoryAdapter.ImageViewHoler(v);
         }
 
-
         /* onBindViewHolder(): called to display the data at the specified position.
         This method sets the data for the item at the given position.
         It also sets an OnClickListener for the item's CardView,
@@ -169,7 +167,6 @@ public class ReportActivity extends AppCompatActivity {
             holder.price.setText("Price: "+itemArrayList.get(position).getOriginalPrice()+"$");  // display the price of the item.
             holder.quantity.setText("Quantity: "+itemArrayList.get(position).getQuantity()); // display the quantity of the item.
 
-
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -186,7 +183,6 @@ public class ReportActivity extends AppCompatActivity {
         public int getItemCount() {
             return itemArrayList.size();
         }
-
 
         /* inner class called ImageViewHolder that extends RecyclerView.ViewHolder and represents a view holder for the list item.
         It holds the item's views, such as the name, price, and image views. */

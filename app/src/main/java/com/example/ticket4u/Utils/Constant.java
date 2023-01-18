@@ -130,16 +130,4 @@ public class Constant {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.edit().putString("Longitude", s).commit();
     }
-
-    public static void ShowMessageDialogWithOkBtn(Context context, String message,
-                                                  DialogInterface.OnClickListener positiveBtnListner){
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-        builder1.setMessage(message);
-        builder1.setCancelable(true);
-        builder1.setPositiveButton(
-                "OK",positiveBtnListner);
-
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
-    }
 }

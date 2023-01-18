@@ -31,7 +31,6 @@ public class ViewReportActivity extends AppCompatActivity {
     ArrayList<String> reportedArrayList =new ArrayList<String>();
     DatabaseReference myRef;//used as instance to get data from the firebase.
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +64,6 @@ public class ViewReportActivity extends AppCompatActivity {
         loadingDialog.show();// The loadingDialog is displayed while the data is being fetched.
         reportedArrayList=new ArrayList<String>();
 
-
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -79,7 +77,6 @@ public class ViewReportActivity extends AppCompatActivity {
 
                 loadingDialog.dismiss();
             }
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

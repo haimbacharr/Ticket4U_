@@ -185,7 +185,6 @@ public class AddItemActivity extends AppCompatActivity {
             }
             Notification(notification);
 
-
             Toast.makeText(AddItemActivity.this,"item Add successful",Toast.LENGTH_LONG).show();
             finish();
         } catch (Exception e) {
@@ -252,26 +251,6 @@ public class AddItemActivity extends AppCompatActivity {
         }else{
             selectImageFromGallery();
         }
-    }
-
-    private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(AddItemActivity.this);
-        builder.setTitle(getString(R.string.dialog_permission_title));
-        builder.setMessage(getString(R.string.dialog_permission_message));
-        builder.setPositiveButton(getString(R.string.go_to_settings), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                openSettings();
-            }
-        });
-        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
     }
 
     private void openSettings() {

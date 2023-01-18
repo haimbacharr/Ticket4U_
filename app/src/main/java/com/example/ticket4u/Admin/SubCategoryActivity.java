@@ -40,8 +40,6 @@ public class SubCategoryActivity extends AppCompatActivity {
     String category="";
     DatabaseReference myRef;//used as instance to get data from the firebase.
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +72,6 @@ public class SubCategoryActivity extends AppCompatActivity {
         getData();
         super.onStart();
     }
-
 
     /* The getData() method is called to fetch data from the database. This data is then used to populate the RecyclerView. */
     public void getData(){
@@ -124,7 +121,6 @@ public class SubCategoryActivity extends AppCompatActivity {
             return  new ArrayAdapter.ImageViewHoler(v);
         }
 
-
         /* onBindViewHolder(): called to display the data at the specified position.
         This method sets the data for the item at the given position.
         It also sets an OnClickListener for the item's CardView,
@@ -164,7 +160,6 @@ public class SubCategoryActivity extends AppCompatActivity {
             return stringArrayList.size();
         }
 
-
         /* inner class called ImageViewHolder that extends RecyclerView.ViewHolder and represents a view holder for the list item.
         It holds the item's views, such as the name, price, and image views. */
         public class ImageViewHoler extends RecyclerView.ViewHolder {
@@ -185,7 +180,6 @@ public class SubCategoryActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
 
     /* The functionality of the menu */
     @Override

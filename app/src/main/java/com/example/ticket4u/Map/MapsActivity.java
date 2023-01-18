@@ -1,5 +1,6 @@
 package com.example.ticket4u.Map;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -72,6 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getLastLocation();
     }
 
+    @SuppressLint("MissingPermission")
     private void getLastLocation() { //get the location and update the latitude and longitude of user.
         mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
@@ -89,6 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
+    @SuppressLint("MissingPermission")
     private void requestNewLocationData() {
         // Initializing LocationRequest
         // object with appropriate methods
@@ -145,9 +148,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         optionsse.position(seller);
         mMap.addMarker(options).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.location));
         mMap.addMarker(optionsse).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.store));
-//
-//        mMap.addMarker(new MarkerOptions().position(you).title("You"));
-//        mMap.addMarker(new MarkerOptions().position(seller).title("Seller"));
 
         String url = getDirectionsUrl(you, seller);
 
@@ -157,7 +157,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
     }
-
 
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
@@ -177,15 +176,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
             ParserTask parserTask = new ParserTask();
-
-
             parserTask.execute(result);
 
         }
     }
-
 
     /**
      * A class to parse the Google Places in JSON format
@@ -215,7 +210,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             ArrayList points = null;
             PolylineOptions lineOptions = null;
             MarkerOptions markerOptions = new MarkerOptions();
-
 
             if(result.size() > 0) {
                 for (int i = 0; i < result.size(); i++) {
@@ -268,8 +262,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
-
-
         return url;
     }
 
@@ -311,5 +303,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return data;
     }
-
 }

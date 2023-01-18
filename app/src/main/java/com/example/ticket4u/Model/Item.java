@@ -18,6 +18,7 @@ public class Item {
             return itemOne.getName().toLowerCase(Locale.getDefault()).compareTo(itemTwo.getName().toLowerCase(Locale.getDefault()));
         }
     };
+
     public static final Comparator<Item> DISASC = new Comparator<Item>() {
         @Override
         public int compare(Item itemOne, Item itemTwo) {
@@ -26,6 +27,7 @@ public class Item {
             return tripRateOne.compareTo(tripRateTwo);
         }
     };
+
     public static final Comparator<Item> PRICEASC = new Comparator<Item>() {
         @Override
         public int compare(Item itemOne, Item itemTwo) {
@@ -40,6 +42,7 @@ public class Item {
             return tripRateOne.compareTo(tripRateTwo);
         }
     };
+
     public static final Comparator<Item> DATEASC = new Comparator<Item>() {
         @Override
         public int compare(Item itemOne, Item itemTwo) {
@@ -61,7 +64,6 @@ public class Item {
                 e.printStackTrace();
             }
 
-
             return d1.compareTo(d2);
         }
     };
@@ -82,6 +84,7 @@ public class Item {
         this.longitude=longitude;
         this.distance=distance;
     }
+
     public Item(String name, String pic, String description,String quantity,String price, String category, String subCategory, String userId, String itemId,String askingPrice,String date,String city,String number,String latitude,String longitude,String distance) {
         this.name = name;
         this.pic = pic;

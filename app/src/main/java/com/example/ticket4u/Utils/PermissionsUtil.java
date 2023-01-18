@@ -55,5 +55,4 @@ public class PermissionsUtil {
         }
         return true;
     }
-
 }

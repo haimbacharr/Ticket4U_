@@ -25,7 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-
 public class SelectCategoryFragment extends Fragment {
 
     Spinner category,subcategory;
@@ -129,10 +128,6 @@ public class SelectCategoryFragment extends Fragment {
             }
         });
 
-
-
-
-
     }
     public void getSubCategory(String name){
         loadingDialog.show();
@@ -159,13 +154,5 @@ public class SelectCategoryFragment extends Fragment {
 
             }
         });
-
-
-
-
-
     }
-
-
-
 }

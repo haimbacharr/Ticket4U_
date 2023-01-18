@@ -3,11 +3,9 @@ package com.example.ticket4u.Fragment;
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 import static com.example.ticket4u.Utils.Constant.getUserId;
-import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
 import static com.example.ticket4u.Utils.Constant.setUserInterest;
 import static com.example.ticket4u.Utils.Constant.setUsername;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -36,7 +34,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.ticket4u.Admin.AddCategoryActivity;
 import com.example.ticket4u.R;
 import com.example.ticket4u.Utils.PermissionsUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,11 +50,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -65,7 +57,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class UpdateProfileFragment extends Fragment {

@@ -23,7 +23,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ticket4u.Admin.AdminMainActivity;
 import com.example.ticket4u.Model.Item;
 import com.example.ticket4u.R;
 import com.example.ticket4u.User.EditItemActivity;

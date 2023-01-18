@@ -1,9 +1,5 @@
 package com.example.ticket4u.User;
 
-import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
-import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
-
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,8 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.ticket4u.Admin.AdminMainActivity;
-import com.example.ticket4u.MainActivity;
 import com.example.ticket4u.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

@@ -1,7 +1,5 @@
 package com.example.ticket4u.Utils;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;

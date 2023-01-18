@@ -1,13 +1,9 @@
 package com.example.ticket4u.Model;
 
-import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;

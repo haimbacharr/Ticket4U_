@@ -1,6 +1,15 @@
 package com.example.ticket4u.Fragment;
 
-import static com.example.ticket4u.Utils.Constant.*;
+import static com.example.ticket4u.Utils.Constant.setAdminLoginStatus;
+import static com.example.ticket4u.Utils.Constant.setUserCity;
+import static com.example.ticket4u.Utils.Constant.setUserEmail;
+import static com.example.ticket4u.Utils.Constant.setUserId;
+import static com.example.ticket4u.Utils.Constant.setUserInterest;
+import static com.example.ticket4u.Utils.Constant.setUserLatitude;
+import static com.example.ticket4u.Utils.Constant.setUserLoginStatus;
+import static com.example.ticket4u.Utils.Constant.setUserLongitude;
+import static com.example.ticket4u.Utils.Constant.setUserNumber;
+import static com.example.ticket4u.Utils.Constant.setUsername;
 
 import android.app.Dialog;
 import android.content.Intent;

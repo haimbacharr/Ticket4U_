@@ -28,8 +28,10 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.example.ticket4u.R;
+import com.example.ticket4u.Utils.PermissionsUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -199,24 +201,12 @@ public class EditItemActivity extends AppCompatActivity {
     }
 
     public  void addImage(){
-        Dexter.withActivity(EditItemActivity.this)
-                .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted()) {
-                            selectImageFromGallery();
-                        }
-                        if (report.isAnyPermissionPermanentlyDenied()) {
-                            showSettingsDialog();
-                        }
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                }).check();
+        if (!PermissionsUtil.hasPermissions(EditItemActivity.this)) {
+            ActivityCompat.requestPermissions(EditItemActivity.this, PermissionsUtil.permissions(),
+                    451);
+        }else{
+            selectImageFromGallery();
+        }
     }
 
     private void showSettingsDialog() {
@@ -283,4 +273,6 @@ public class EditItemActivity extends AppCompatActivity {
         MimeTypeMap mime=MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(uri));
     }
+
+
 }

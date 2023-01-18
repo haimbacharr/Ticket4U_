@@ -26,9 +26,12 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.example.ticket4u.MainActivity;
 import com.example.ticket4u.R;
+import com.example.ticket4u.User.AddItemActivity;
+import com.example.ticket4u.Utils.PermissionsUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -163,25 +166,12 @@ public class AddCategoryActivity extends AppCompatActivity {
      if granted, allows the user to select an image from the device's gallery.
      If the permissions are permanently denied, a settings dialog is shown to the user. */
     public  void addImage(){
-        Dexter.withActivity(AddCategoryActivity.this)
-                .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted()) {
-                            selectImageFromGallery();
-                        }
-
-                        if (report.isAnyPermissionPermanentlyDenied()) {
-                            showSettingsDialog();
-                        }
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                }).check();
+        if (!PermissionsUtil.hasPermissions(AddCategoryActivity.this)) {
+            ActivityCompat.requestPermissions(AddCategoryActivity.this, PermissionsUtil.permissions(),
+                    451);
+        }else{
+            selectImageFromGallery();
+        }
     }
 
     /* This code is creating an AlertDialog that shows a message to the user and provides two options: go to settings or cancel. */

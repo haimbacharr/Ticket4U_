@@ -72,23 +72,6 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_item_asking_price"
                     android:layout_width="match_parent"
-                    android:inputType="number"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_item_quantity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:hint="Quantity"
-                tools:ignore="HardcodedText">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_item_quantity"
-                    android:layout_width="match_parent"
-                    android:inputType="number"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -108,6 +91,21 @@
                     android:layout_gravity="center"
                     android:focusableInTouchMode="false"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_item_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="Quantity"
+                tools:ignore="HardcodedText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_item_quantity"
+                    android:layout_width="match_parent"
+                    android:inputType="number"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>

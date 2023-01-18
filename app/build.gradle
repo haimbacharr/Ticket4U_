@@ -59,7 +59,7 @@ dependencies {
 
     implementation'com.airbnb.android:lottie:3.4.1'
     //dextier permission
-    implementation 'com.karumi:dexter:4.2.0'
+    implementation 'com.karumi:dexter:6.2.3'
     // circular image
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 }

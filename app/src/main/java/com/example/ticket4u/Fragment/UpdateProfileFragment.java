@@ -33,10 +33,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.ticket4u.Admin.AddCategoryActivity;
 import com.example.ticket4u.R;
+import com.example.ticket4u.Utils.PermissionsUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -115,7 +117,7 @@ public class UpdateProfileFragment extends Fragment {
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -300,46 +302,14 @@ public class UpdateProfileFragment extends Fragment {
     }
 
     public  void addImage(){
-        Dexter.withActivity(getActivity())
-                .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted()) {
-                            selectImageFromGallery();
-                        }
-                        if (report.isAnyPermissionPermanentlyDenied()) {
-                            showSettingsDialog();
-                        }
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                }).check();
+        if (!PermissionsUtil.hasPermissions(getActivity())) {
+            ActivityCompat.requestPermissions(getActivity(), PermissionsUtil.permissions(),
+                    451);
+        }else{
+            selectImageFromGallery();
+        }
     }
 
-    private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.dialog_permission_title));
-        builder.setMessage(getString(R.string.dialog_permission_message));
-        builder.setPositiveButton(getString(R.string.go_to_settings), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                openSettings();
-            }
-        });
-        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
-
-    }
     private void openSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package",getContext().getPackageName(), null);

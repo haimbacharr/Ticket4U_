@@ -87,7 +87,7 @@ public class HomeFragment extends Fragment  {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         search = view.findViewById(R.id.search);
 
-        checkPermission();
+
         //loading dialog
         loadingDialog = new Dialog(getContext());
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -170,8 +170,8 @@ public class HomeFragment extends Fragment  {
             private void filter(String text) {
                 ArrayList<Item> filterlist = new ArrayList<>();
                 for (Item item : itemArrayList1) {
-                    if (item.getName().toLowerCase().contains(text.toLowerCase()))
-                    {
+                    if (item.getName().toLowerCase().contains(text.toLowerCase())
+                           ) {
                         filterlist.add(item);
                     }
                 }
@@ -295,8 +295,14 @@ public class HomeFragment extends Fragment  {
                         }catch (Exception e){
                             e.printStackTrace();
                         }
-                        if (dataSnapshot1.child("Sold").getValue(String.class).equals("not")) {
-                            itemArrayList1.add(new Item(dataSnapshot1.child("Name").getValue(String.class), dataSnapshot1.child("ItemImage").getValue(String.class), dataSnapshot1.child("Description").getValue(String.class), dataSnapshot1.child("Quantity").getValue(String.class), dataSnapshot1.child("OriginalPrice").getValue(String.class), dataSnapshot1.child("Category").getValue(String.class), dataSnapshot1.child("SubCategory").getValue(String.class), dataSnapshot1.child("UserId").getValue(String.class), dataSnapshot1.child("ItemId").getValue(String.class), dataSnapshot1.child("AskingPrice").getValue(String.class), dataSnapshot1.child("Date").getValue(String.class), dataSnapshot1.child("City").getValue(String.class), dataSnapshot1.child("Number").getValue(String.class),""+distance));
+                        try {
+                            if (TextUtils.isEmpty(dataSnapshot1.child("Sold").getValue(String.class)) || dataSnapshot1.child("Sold").getValue(String.class).equals("not")) {
+                                itemArrayList1.add(new Item(dataSnapshot1.child("Name").getValue(String.class), dataSnapshot1.child("ItemImage").getValue(String.class), dataSnapshot1.child("Description").getValue(String.class), dataSnapshot1.child("Quantity").getValue(String.class), dataSnapshot1.child("OriginalPrice").getValue(String.class), dataSnapshot1.child("Category").getValue(String.class), dataSnapshot1.child("SubCategory").getValue(String.class), dataSnapshot1.child("UserId").getValue(String.class), dataSnapshot1.child("ItemId").getValue(String.class), dataSnapshot1.child("AskingPrice").getValue(String.class), dataSnapshot1.child("Date").getValue(String.class), dataSnapshot1.child("City").getValue(String.class), dataSnapshot1.child("Number").getValue(String.class), "" + distance));
+                            }
+                        }catch (NullPointerException e){
+                            itemArrayList1.add(new Item(dataSnapshot1.child("Name").getValue(String.class), dataSnapshot1.child("ItemImage").getValue(String.class), dataSnapshot1.child("Description").getValue(String.class), dataSnapshot1.child("Quantity").getValue(String.class), dataSnapshot1.child("OriginalPrice").getValue(String.class), dataSnapshot1.child("Category").getValue(String.class), dataSnapshot1.child("SubCategory").getValue(String.class), dataSnapshot1.child("UserId").getValue(String.class), dataSnapshot1.child("ItemId").getValue(String.class), dataSnapshot1.child("AskingPrice").getValue(String.class), dataSnapshot1.child("Date").getValue(String.class), dataSnapshot1.child("City").getValue(String.class), dataSnapshot1.child("Number").getValue(String.class), "" + distance));
+                        }catch (Exception e){
+                            itemArrayList1.add(new Item(dataSnapshot1.child("Name").getValue(String.class), dataSnapshot1.child("ItemImage").getValue(String.class), dataSnapshot1.child("Description").getValue(String.class), dataSnapshot1.child("Quantity").getValue(String.class), dataSnapshot1.child("OriginalPrice").getValue(String.class), dataSnapshot1.child("Category").getValue(String.class), dataSnapshot1.child("SubCategory").getValue(String.class), dataSnapshot1.child("UserId").getValue(String.class), dataSnapshot1.child("ItemId").getValue(String.class), dataSnapshot1.child("AskingPrice").getValue(String.class), dataSnapshot1.child("Date").getValue(String.class), dataSnapshot1.child("City").getValue(String.class), dataSnapshot1.child("Number").getValue(String.class), "" + distance));
                         }
                     }
 
@@ -365,53 +371,7 @@ public class HomeFragment extends Fragment  {
         myRef.removeValue();
     }
 
-    public void checkPermission() {
-        Dexter.withActivity(getActivity())
-                .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION).withListener(new MultiplePermissionsListener() {
-            @Override
-            public void onPermissionsChecked(MultiplePermissionsReport report) {
-                if (report.areAllPermissionsGranted()) {
 
-                }
-
-                if (report.isAnyPermissionPermanentlyDenied()) {
-                    showSettingsDialog();
-                }
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                token.continuePermissionRequest();
-            }
-        }).check();
-    }
-
-    private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(getString(R.string.dialog_permission_title));
-        builder.setMessage(getString(R.string.dialog_permission_message));
-        builder.setPositiveButton(getString(R.string.go_to_settings), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                openSettings();
-            }
-        });
-        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
-    }
-
-    private void openSettings() {
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
-        intent.setData(uri);
-        startActivityForResult(intent, 101);
-    }
 
     public class ArrayAdapter extends RecyclerView.Adapter<ArrayAdapter.ImageViewHoler> {
 

@@ -46,6 +46,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ticket4u.R;
 import com.example.ticket4u.User.AccountActivity;
+import com.example.ticket4u.User.AddItemActivity;
+import com.example.ticket4u.Utils.PermissionsUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -405,24 +407,12 @@ public class RegisterFragment extends Fragment  {
     }
 
     public void addImage(){
-        Dexter.withActivity(getActivity())
-                .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted()) {
-                            selectImageFromGallery();
-                        }
-                        if (report.isAnyPermissionPermanentlyDenied()) {
-                            showSettingsDialog();
-                        }
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                }).check();
+        if (!PermissionsUtil.hasPermissions(getActivity())) {
+            ActivityCompat.requestPermissions(getActivity(), PermissionsUtil.permissions(),
+                    451);
+        }else{
+            selectImageFromGallery();
+        }
     }
 
     private void showSettingsDialog() {

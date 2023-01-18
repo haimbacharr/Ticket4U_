@@ -35,10 +35,12 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.ticket4u.R;
+import com.example.ticket4u.Utils.PermissionsUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -125,7 +127,7 @@ public class AddItemActivity extends AppCompatActivity {
         loadingDialog.show();
         try {
             String id =createFavId().substring(0,8);
-            myRef= FirebaseDatabase.getInstance().getReference("Items").child(id);
+            myRef=  FirebaseDatabase.getInstance().getReference("Items").child(id);
             myRef.child("Name").setValue(et_item_name.getText().toString());
             myRef.child("ItemId").setValue(id);
             myRef.child("Category").setValue(CATEGORY);
@@ -190,6 +192,7 @@ public class AddItemActivity extends AppCompatActivity {
             }
             Notification(notification);
 
+
             Toast.makeText(AddItemActivity.this,"item Add successful",Toast.LENGTH_LONG).show();
             finish();
         } catch (Exception e) {
@@ -250,24 +253,12 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     public  void addImage(){
-        Dexter.withActivity(AddItemActivity.this)
-                .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted()) {
-                            selectImageFromGallery();
-                        }
-                        if (report.isAnyPermissionPermanentlyDenied()) {
-                            showSettingsDialog();
-                        }
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                }).check();
+        if (!PermissionsUtil.hasPermissions(AddItemActivity.this)) {
+            ActivityCompat.requestPermissions(AddItemActivity.this, PermissionsUtil.permissions(),
+                    451);
+        }else{
+            selectImageFromGallery();
+        }
     }
 
     private void showSettingsDialog() {
@@ -328,11 +319,10 @@ public class AddItemActivity extends AppCompatActivity {
             imageView.setImageURI(imgUri);
         }
     }
-
-        // get the extension of file
-        private String getFileEx(Uri uri){
-            ContentResolver cr=AddItemActivity.this.getContentResolver();
-            MimeTypeMap mime=MimeTypeMap.getSingleton();
-            return mime.getExtensionFromMimeType(cr.getType(uri));
-        }
+    // get the extension of file
+    private String getFileEx(Uri uri){
+        ContentResolver cr=AddItemActivity.this.getContentResolver();
+        MimeTypeMap mime=MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(uri));
+    }
 }

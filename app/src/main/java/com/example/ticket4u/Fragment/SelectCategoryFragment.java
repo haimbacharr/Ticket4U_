@@ -49,6 +49,7 @@ public class SelectCategoryFragment extends Fragment {
         loadingDialog.setCancelable(false);
         loadingDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        getActivity().setTitle("Set new ticket");
 
         category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -82,7 +83,7 @@ public class SelectCategoryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(SUBCATEGORY.equals("")){
-                    Toast.makeText(getContext(),"you can not add to the categorey",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"you can not add to the category",Toast.LENGTH_LONG).show();
                 }
                 else {
                     startActivity(new Intent(getContext(), AddItemActivity.class));

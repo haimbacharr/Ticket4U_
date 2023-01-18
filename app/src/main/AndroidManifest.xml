@@ -49,6 +49,7 @@
         <activity
             android:name=".User.AddReportActivity"
             android:exported="true"
+            android:label="Ticket4u -> Report an item"
             android:parentActivityName=".User.DetailActivity" />
         <activity
             android:name=".Admin.AdminActivity"

@@ -55,7 +55,7 @@ public class UserItemFragment extends Fragment {
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         listrecylerView=view.findViewById(R.id.listrecylerView);
         listrecylerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
+        getActivity().setTitle("Personal items");
         return view;
     }
 

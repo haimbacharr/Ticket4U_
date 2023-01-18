@@ -53,6 +53,7 @@ public class PreferedItemFragment extends Fragment {
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         listrecylerView=view.findViewById(R.id.listrecylerView);
         listrecylerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        getActivity().setTitle("Preferred items");
 
         return view;
     }

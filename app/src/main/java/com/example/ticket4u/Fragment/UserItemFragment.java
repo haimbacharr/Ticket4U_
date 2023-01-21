@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -158,6 +159,8 @@ public class UserItemFragment extends Fragment {
                             if (options[item].equals("Delete")) {
                                 FirebaseDatabase.getInstance().getReference("Items").child(itemArrayList.get(position).getItemId()).removeValue();
                                 getAllData();
+                                Toast.makeText(getActivity(), "item" + itemArrayList.get(item) + " is deleted from the system", Toast.LENGTH_LONG).show();
+
                                 dialog.dismiss();
                             } else if (options[item].equals("Cancel")) {
                                 dialog.dismiss();

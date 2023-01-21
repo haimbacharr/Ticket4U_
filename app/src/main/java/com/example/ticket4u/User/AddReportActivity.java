@@ -28,7 +28,7 @@ public class AddReportActivity extends AppCompatActivity {
         else {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Items").child(getIntent().getStringExtra("id")).child("Report");
              databaseReference.child("itemReport").setValue(et_report.getText().toString());
-            Toast.makeText(AddReportActivity.this, "report submited", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddReportActivity.this, "report submitted", Toast.LENGTH_SHORT).show();
             finish();
         }
     }

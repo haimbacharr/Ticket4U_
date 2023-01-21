@@ -157,6 +157,7 @@ public class DetailActivity extends AppCompatActivity {
           else {
               startActivity(new Intent(this,AddReportActivity.class)
                       .putExtra("id",itemArrayList.get(index).getItemId()));
+              finish();
           }
 
     }

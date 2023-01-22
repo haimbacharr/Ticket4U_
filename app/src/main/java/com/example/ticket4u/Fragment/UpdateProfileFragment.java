@@ -162,11 +162,15 @@ public class UpdateProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){ //add category from db to arraylist
-                    if(!stringArrayList.contains(dataSnapshot1.child("Name").getValue(String.class))){
-                        stringArrayList.add(dataSnapshot1.child("Name").getValue(String.class));
-                        if(userCategory.equals(dataSnapshot1.child("Name").getValue(String.class))){ //if we found the category
-                            selectIndex=stringArrayList.size()-1; //update the index of our chosen category
+                    try {
+                        if (!stringArrayList.contains(dataSnapshot1.child("Name").getValue(String.class))) {
+                            stringArrayList.add(dataSnapshot1.child("Name").getValue(String.class));
+                            if (userCategory.equals(dataSnapshot1.child("Name").getValue(String.class))) { //if we found the category
+                                selectIndex = stringArrayList.size() - 1; //update the index of our chosen category
+                            }
                         }
+                    }catch (NullPointerException e){
+                    }catch (Exception e){
                     }
                 }
                 loadingDialog.dismiss();

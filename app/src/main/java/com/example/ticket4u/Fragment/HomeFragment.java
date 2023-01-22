@@ -220,27 +220,29 @@ public class HomeFragment extends Fragment  {
                 categoryAdapter = new CategoryAdapter();
                 listrecylerView.setAdapter(categoryAdapter);
                 categoryAdapter.notifyDataSetChanged();
+                if (getContext() != null) {
 
-                if(getSort(getContext()).equalsIgnoreCase("name")){
-                    if (itemArrayList.size() > 0) {
-                        Collections.sort(itemArrayList, Item.NAMEASC);
+                    if (getSort(getContext()).equalsIgnoreCase("name")) {
+                        if (itemArrayList.size() > 0) {
+                            Collections.sort(itemArrayList, Item.NAMEASC);
+                        }
+                        categoryAdapter.notifyDataSetChanged();
+                    } else if (getSort(getContext()).equalsIgnoreCase("date")) {
+                        if (itemArrayList.size() > 0) {
+                            Collections.sort(itemArrayList, Item.DATEASC);
+                        }
+                        categoryAdapter.notifyDataSetChanged();
+                    } else if (getSort(getContext()).equalsIgnoreCase("distance")) {
+                        if (itemArrayList.size() > 0) {
+                            Collections.sort(itemArrayList, Item.DISASC);
+                        }
+                        categoryAdapter.notifyDataSetChanged();
+                    } else if (getSort(getContext()).equalsIgnoreCase("price")) {
+                        if (itemArrayList.size() > 0) {
+                            Collections.sort(itemArrayList, Item.PRICEASC);
+                        }
+                        categoryAdapter.notifyDataSetChanged();
                     }
-                    categoryAdapter.notifyDataSetChanged();
-                }else if(getSort(getContext()).equalsIgnoreCase("date")){
-                    if (itemArrayList.size() > 0) {
-                        Collections.sort(itemArrayList, Item.DATEASC);
-                    }
-                    categoryAdapter.notifyDataSetChanged();
-                }else if(getSort(getContext()).equalsIgnoreCase("distance")){
-                    if (itemArrayList.size() > 0) {
-                        Collections.sort(itemArrayList, Item.DISASC);
-                    }
-                    categoryAdapter.notifyDataSetChanged();
-                }else if(getSort(getContext()).equalsIgnoreCase("price")){
-                    if (itemArrayList.size() > 0) {
-                        Collections.sort(itemArrayList, Item.PRICEASC);
-                    }
-                    categoryAdapter.notifyDataSetChanged();
                 }
                 loadingDialog.dismiss();
             }

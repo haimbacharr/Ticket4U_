@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".User.AddReportActivity">
+    tools:context="com.ticket.foru.User.AddReportActivity">
 
     <EditText
         android:id="@+id/et_report"

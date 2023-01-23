@@ -33,33 +33,33 @@
                 android:resource="@xml/provider_paths" />
         </provider>
         <activity
-            android:name=".User.EditItemActivity"
+            android:name="com.ticket.foru.User.EditItemActivity"
             android:exported="true"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName="com.ticket.foru.MainActivity"/>
         <activity
-            android:name=".Admin.ViewReportActivity"
+            android:name="com.ticket.foru.Admin.ViewReportActivity"
             android:exported="true"
             android:label="Admin -> Reported items "
-            android:parentActivityName=".Admin.ReportActivity" />
+            android:parentActivityName="com.ticket.foru.Admin.ReportActivity" />
         <activity
-            android:name=".Admin.ReportActivity"
+            android:name="com.ticket.foru.Admin.ReportActivity"
             android:exported="true"
             android:label="Admin -> Reported items"
-            android:parentActivityName=".Admin.AdminActivity" />
+            android:parentActivityName="com.ticket.foru.Admin.AdminActivity" />
         <activity
-            android:name=".User.AddReportActivity"
+            android:name="com.ticket.foru.User.AddReportActivity"
             android:exported="true"
             android:label="Ticket4u -> Report an item"
-            android:parentActivityName=".User.DetailActivity" />
+            android:parentActivityName="com.ticket.foru.User.DetailActivity" />
         <activity
-            android:name=".Admin.AdminActivity"
+            android:name="com.ticket.foru.Admin.AdminActivity"
             android:label="Admin -> main"
             android:exported="true"
-            android:parentActivityName=".Fragment.LoginFragment"/>
+            android:parentActivityName="com.ticket.foru.Fragment.LoginFragment"/>
         <activity
-            android:name=".User.DetailActivity"
+            android:name="com.ticket.foru.User.DetailActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.ticket.foru.MainActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -80,52 +80,52 @@
             android:value="AIzaSyCwVX8EtQqlhbIlNEa1kNdKzhWdLTBJK_Y" />
 
         <activity
-            android:name=".Map.MapsActivity"
+            android:name="com.ticket.foru.Map.MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps"
-            android:parentActivityName=".User.DetailActivity" />
+            android:parentActivityName="com.ticket.foru.User.DetailActivity" />
         <activity
-            android:name=".Admin.AddCategoryActivity"
+            android:name="com.ticket.foru.Admin.AddCategoryActivity"
             android:label="Admin -> View categories -> Add category"
             android:exported="false"
-            android:parentActivityName=".Admin.CategoryActivity" >
+            android:parentActivityName="com.ticket.foru.Admin.CategoryActivity" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Admin.SubCategoryActivity"
+            android:name="com.ticket.foru.Admin.SubCategoryActivity"
             android:exported="false"
             android:label="Admin -> View Sub-category"
-            android:parentActivityName=".Admin.CategoryActivity">
+            android:parentActivityName="com.ticket.foru.Admin.CategoryActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Admin.CategoryActivity"
+            android:name="com.ticket.foru.Admin.CategoryActivity"
             android:exported="false"
             android:label="Admin -> View Categories"
-            android:parentActivityName=".Admin.AdminActivity">
+            android:parentActivityName="com.ticket.foru.Admin.AdminActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".User.AddItemActivity"
+            android:name="com.ticket.foru.User.AddItemActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.ticket.foru.MainActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Admin.AdminMainActivity"
+            android:name="com.ticket.foru.Admin.AdminMainActivity"
             android:exported="false"
             android:label="Admin -> View Items"
-            android:parentActivityName=".Admin.AdminActivity" />
+            android:parentActivityName="com.ticket.foru.Admin.AdminActivity" />
         <activity
-            android:name=".Screens.SplashActivity"
+            android:name="com.ticket.foru.Screens.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -134,19 +134,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".User.ForgotPasswordActivity"
+            android:name="com.ticket.foru.User.ForgotPasswordActivity"
             android:label="Forget Password"
             android:exported="false"/>
         <activity
-            android:name=".User.AccountActivity"
+            android:name="com.ticket.foru.User.AccountActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName="com.ticket.foru.MainActivity"/>
         <activity
-            android:name=".MainActivity"
+            android:name="com.ticket.foru.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Mangement.NoActionBar" />
         <service
-            android:name=".Utils.MyFirebaseMessagingService"
+            android:name="com.ticket.foru.Utils.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

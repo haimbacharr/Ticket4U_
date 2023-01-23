@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin.ReportActivity">
+    tools:context="com.ticket.foru.Admin.ReportActivity">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listrecylerView"
         android:layout_width="match_parent"

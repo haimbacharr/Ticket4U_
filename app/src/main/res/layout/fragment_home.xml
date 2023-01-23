@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".Fragment.HomeFragment">
+    tools:context="com.ticket.foru.Fragment.HomeFragment">
 
     <ImageButton
         android:id="@+id/imfilter"

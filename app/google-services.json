@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "366036443416",
-    "firebase_url": "https://ticket4u-bd3b6-default-rtdb.firebaseio.com",
-    "project_id": "ticket4u-bd3b6",
-    "storage_bucket": "ticket4u-bd3b6.appspot.com"
+    "project_number": "700970421273",
+    "firebase_url": "https://ticket4u-570ee-default-rtdb.firebaseio.com",
+    "project_id": "ticket4u-570ee",
+    "storage_bucket": "ticket4u-570ee.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:366036443416:android:d52b25a81525f6fed9be6d",
+        "mobilesdk_app_id": "1:700970421273:android:fe8e69ac4436f708462e88",
         "android_client_info": {
-          "package_name": "com.example.ticket4u"
+          "package_name": "com.ticket.foru"
         }
       },
       "oauth_client": [
         {
-          "client_id": "366036443416-e0qqpcldof69u3devpumto8tp1v5dumi.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.ticket4u",
-            "certificate_hash": "6e1b0a876f1fa5a84361435d9981705ab5454d46"
-          }
-        },
-        {
-          "client_id": "366036443416-g7g7l7uemgmn6fqsv327fq8s4ig58r9e.apps.googleusercontent.com",
+          "client_id": "700970421273-rn1v5hbmvug852heo5rhkn0klh42cr44.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB_8pjqhyj8yL3G5BA6dsx5G5Dj3T6Fqco"
+          "current_key": "AIzaSyA7boV7lo5E3rnEMGtDnO2lqQRdsAbbbOI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "366036443416-g7g7l7uemgmn6fqsv327fq8s4ig58r9e.apps.googleusercontent.com",
+              "client_id": "700970421273-rn1v5hbmvug852heo5rhkn0klh42cr44.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

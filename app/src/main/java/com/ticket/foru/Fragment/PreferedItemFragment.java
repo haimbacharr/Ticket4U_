@@ -159,7 +159,7 @@ public class PreferedItemFragment extends Fragment {
                     .into(holder.cat_image);
 
             holder.name.setText(myItemArrayList.get(position).getName());
-            holder.price.setText("Price "+myItemArrayList.get(position).getOriginalPrice()+" $");
+            holder.price.setText("Price "+myItemArrayList.get(position).getOriginalPrice()+" ₪");
             holder.quantity.setText("Quantity "+myItemArrayList.get(position).getQuantity());
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override

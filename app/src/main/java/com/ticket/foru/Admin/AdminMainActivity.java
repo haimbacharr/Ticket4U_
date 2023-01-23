@@ -139,7 +139,7 @@ public class AdminMainActivity extends AppCompatActivity {
 
             holder.name.setTypeface(null, Typeface.BOLD);// set the name text to be bold.
             holder.name.setText(itemArrayList.get(position).getName());
-            holder.price.setText("Price: "+itemArrayList.get(position).getOriginalPrice()+"$"); // display the price of the item.
+            holder.price.setText("Price: "+itemArrayList.get(position).getOriginalPrice()+"₪"); // display the price of the item.
             holder.quantity.setText("Quantity: "+itemArrayList.get(position).getQuantity()); // display the quantity of the item.
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {

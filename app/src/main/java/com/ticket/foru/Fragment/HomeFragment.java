@@ -466,7 +466,7 @@ public class HomeFragment extends Fragment  {
 
             Picasso.with(getContext()).load(itemArrayList.get(position).getPic()).placeholder(R.drawable.progress_animation).fit().centerCrop().into(holder.cat_image);
             holder.name.setText(itemArrayList.get(position).getName());
-            holder.price.setText("Price " + itemArrayList.get(position).getAskingPrice() + " $");
+            holder.price.setText("Price " + itemArrayList.get(position).getAskingPrice() + " ₪");
             holder.quantity.setText("Quantity " + itemArrayList.get(position).getQuantity());
 //            if(itemArrayList.get(position).getDistance().equalsIgnoreCase("0.0")){
 //                holder.distance.setVisibility(View.GONE);

@@ -144,7 +144,7 @@ public class UserItemFragment extends Fragment {
                     .into(holder.cat_image);
 
             holder.name.setText(itemArrayList.get(position).getName());
-            holder.price.setText("Price "+itemArrayList.get(position).getOriginalPrice()+" $");
+            holder.price.setText("Price "+itemArrayList.get(position).getOriginalPrice()+" ₪");
             holder.quantity.setText("Quantity "+itemArrayList.get(position).getQuantity());
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override

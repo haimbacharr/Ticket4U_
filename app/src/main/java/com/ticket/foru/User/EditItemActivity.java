@@ -128,7 +128,7 @@ public class EditItemActivity extends AppCompatActivity {
         myRef.child("Quantity").setValue(et_item_quantity.getText().toString());
         myRef.child("Description").setValue(et_description.getText().toString());
 
-        if(imgUri==null) {
+        if(imgUri==null && imageView ==null) {
             // Set default image URL in Realtime Database
             String defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/ticket4u-570ee.appspot.com/o/item_images%2Fitem_default-image.jpg?alt=media&token=7ab703fb-ad8e-4f6b-bb8c-6ebc07ee4683";
             myRef.child("ItemImage").setValue(defaultImageUrl);

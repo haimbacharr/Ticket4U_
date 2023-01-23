@@ -96,7 +96,7 @@ public class UserItemFragment extends Fragment {
                                     , dataSnapshot1.child("Category").getValue(String.class)
                                     , dataSnapshot1.child("SubCategory").getValue(String.class)
                                     , dataSnapshot1.child("UserId").getValue(String.class),
-                                      dataSnapshot1.child("ItemId").getValue(String.class)
+                                    dataSnapshot1.child("ItemId").getValue(String.class)
                                     , dataSnapshot1.child("AskingPrice").getValue(String.class)
                                     , dataSnapshot1.child("Date").getValue(String.class)
                                     ,dataSnapshot1.child("latitude").getValue(String.class)
@@ -159,8 +159,7 @@ public class UserItemFragment extends Fragment {
                             if (options[item].equals("Delete")) {
                                 FirebaseDatabase.getInstance().getReference("Items").child(itemArrayList.get(position).getItemId()).removeValue();
                                 getAllData();
-                                Toast.makeText(getActivity(), "item" + itemArrayList.get(item) + " is deleted from the system", Toast.LENGTH_LONG).show();
-
+                                Toast.makeText(getActivity(),"item is deleted from the system",Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             } else if (options[item].equals("Cancel")) {
                                 dialog.dismiss();
@@ -171,7 +170,7 @@ public class UserItemFragment extends Fragment {
                             }
                             else if (options[item].equals("Mark As Sold?")) {
                                 FirebaseDatabase.getInstance().getReference("Items").child(itemArrayList.get(position).getItemId())
-                                .child("Sold").setValue("yes");
+                                        .child("Sold").setValue("yes");
                                 getAllData();
                                 dialog.dismiss();
                             }
